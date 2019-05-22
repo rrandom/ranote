@@ -1,4 +1,4 @@
-# ui
+# ranote-ui
 
 ## Project setup
 ```
