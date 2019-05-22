@@ -6,7 +6,7 @@ fn main() {
     web_view::builder()
         .title("Juggernaut")
         // .content(Content::Html(include_str!("web/index.html")))
-        .content(Content::Url("http://localhost:8081"))
+        .content(Content::Url("http://localhost:8080"))
         .size(800, 600)
         .resizable(true)
         .debug(true)
