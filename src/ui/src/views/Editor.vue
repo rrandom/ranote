@@ -5,6 +5,7 @@
 
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator';
+import { Route } from 'vue-router';
 
 import CodeMirror from 'codemirror';
 
@@ -14,15 +15,16 @@ import 'codemirror/theme/midnight.css';
 import 'codemirror/keymap/emacs';
 
 @Component({
-  beforeRouteLeave(to, from, next) {
-    let value =  this.cm.getDoc().getValue();
-    window.localStorage.setItem('content', value);
-    next();
-  },
 })
-export default class Home extends Vue {
+export default class Editor extends Vue {
 
   public cm: null | CodeMirror.Editor = null;
+
+  public beforeRouteLeave(to: Route, from: Route, next: any) {
+    const value = this.cm!.getDoc().getValue();
+    window.localStorage.setItem('content', value);
+    next();
+  }
 
   public mounted() {
     const cm = CodeMirror(this.$el as HTMLElement, {

@@ -9,6 +9,7 @@
   },
   "dependencies": {
     "@types/codemirror": "^0.0.74",
+    "@types/markdown-it": "^0.0.7",
     "babel-polyfill": "^6.26.0",
     "codemirror": "^5.47.0",
     "markdown-it": "^8.4.2",
