@@ -1,8 +1,7 @@
 
 use std::{fs};
 
-fn main() {
-
+fn get_files() {
     let path = dirs::home_dir().and_then(|mut h| {
         h.push(".ranote");
         Some(h.into_os_string())
@@ -17,6 +16,11 @@ fn main() {
     let files: Vec<_> = fs::read_dir(path).unwrap().collect();
 
     dbg!(&files);
+}
+
+fn main() {
+
+    get_files();
 
     web_view::builder()
         .title("Ranote")
