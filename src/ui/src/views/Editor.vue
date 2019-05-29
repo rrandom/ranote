@@ -1,5 +1,5 @@
 <template>
-  <div class="home">
+  <div class="home" @click="onClick">
   </div>
 </template>
 
@@ -24,6 +24,10 @@ export default class Editor extends Vue {
     const value = this.cm!.getDoc().getValue();
     window.localStorage.setItem('content', value);
     next();
+  }
+
+  public onClick() {
+    external.invoke('test-click');
   }
 
   public mounted() {

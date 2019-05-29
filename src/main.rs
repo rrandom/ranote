@@ -1,11 +1,13 @@
+use std::fs;
+use std::ffi::{OsString};
 
-use std::{fs};
-
-fn get_files() {
-    let path = dirs::home_dir().and_then(|mut h| {
-        h.push(".ranote");
-        Some(h.into_os_string())
-    }).unwrap();
+fn get_files() -> Vec<OsString> {
+    let path = dirs::home_dir()
+        .and_then(|mut h| {
+            h.push(".ranote");
+            Some(h.into_os_string())
+        })
+        .unwrap();
 
     dbg!(&path);
 
@@ -13,14 +15,17 @@ fn get_files() {
         fs::create_dir(&path).unwrap();
     }
 
-    let files: Vec<_> = fs::read_dir(path).unwrap().collect();
+    let files: Vec<_> = fs::read_dir(path)
+        .unwrap()
+        .map(|k| k.unwrap().path().into_os_string())
+        .collect();
 
     dbg!(&files);
+    files
 }
 
 fn main() {
-
-    get_files();
+    let files = get_files();
 
     web_view::builder()
         .title("Ranote")
@@ -32,6 +37,10 @@ fn main() {
         .user_data(())
         .invoke_handler(|webview, arg| {
             match arg {
+                "init" => {
+                    println!("ui inited");
+                    webview.eval(&format!("list_dir({})", 123)).unwrap();
+                }
                 "read" => {
                     println!("reading file!");
                     // let file_content = include_str!("web/index.html");
@@ -40,6 +49,9 @@ fn main() {
                     webview
                         .eval(&format!("file_operation({})", file_content))
                         .unwrap();
+                }
+                "test-click" => {
+                    println!("test-click");
                 }
                 _ => unimplemented!(),
             };
