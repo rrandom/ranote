@@ -21,8 +21,8 @@ export default {
   components: {
     LeftBar,
     MiddleBar,
-  }
-}
+  },
+};
 </script>
 <style lang="scss">
 #app {

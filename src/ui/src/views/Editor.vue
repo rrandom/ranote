@@ -8,11 +8,12 @@ import { Component, Vue } from 'vue-property-decorator';
 import { Route } from 'vue-router';
 
 import CodeMirror from 'codemirror';
-
 import 'codemirror/mode/markdown/markdown';
 import 'codemirror/lib/codemirror.css';
 import 'codemirror/theme/midnight.css';
 import 'codemirror/keymap/emacs';
+
+import RFC from '../RFC';
 
 @Component({
 })
@@ -27,7 +28,11 @@ export default class Editor extends Vue {
   }
 
   public onClick() {
-    external.invoke('test-click');
+    // TO-DO
+    (window as any).testClickCb = () => {
+      alert('testClickCb called');
+    };
+    RFC.testClick();
   }
 
   public mounted() {
