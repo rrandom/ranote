@@ -28,8 +28,7 @@ export default class Editor extends Vue {
   }
 
   public onClick() {
-    // TO-DO
-    (window as any).testClickCb = () => {
+    window.testClickCb = () => {
       alert('testClickCb called');
     };
     RFC.testClick();
