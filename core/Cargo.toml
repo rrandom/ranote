@@ -1,11 +1,11 @@
 [package]
-name = "ranote"
+name = "ranote-core"
 version = "0.1.0"
 authors = ["rrandom <emanonhere@gmail.com>"]
 edition = "2018"
 
 [dependencies]
-web-view = "=0.4.0"
+web-view = "0.4.1"
 dirs = "2.0.0"
 serde = "1.0"
 serde_derive = "1.0"
