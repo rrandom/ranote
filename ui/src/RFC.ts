@@ -12,13 +12,21 @@ interface Command {
 
 export default class RFC {
   public static invoke(command: Command) {
-    external.invoke(JSON.stringify(command));
+    if (external.invoke) {
+      external.invoke(JSON.stringify(command));
+    }
   }
 
   public static testClick() {
     this.invoke({
       cmd: 'testClick',
       cb: 'testClickCb',
+    });
+  }
+
+  public static init() {
+    this.invoke({
+      cmd: 'init',
     });
   }
 }

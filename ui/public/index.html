@@ -14,4 +14,7 @@
     <div id="app"></div>
     <!-- built files will be auto injected -->
   </body>
+  <% if (process.env.NODE_ENV === 'development') { %>
+    <script type="text/javascript" src="https://getfirebug.com/firebug-lite.js"></script>
+  <% } %>
 </html>

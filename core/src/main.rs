@@ -1,11 +1,15 @@
 #[macro_use]
 extern crate serde_derive;
+#[macro_use]
 extern crate serde_json;
+
+use serde_json::json;
 
 mod cmd;
 mod file;
 mod utils;
 use cmd::Cmd;
+use utils::format_callback;
 
 fn main() {
     let files = file::get_files();
@@ -18,18 +22,20 @@ fn main() {
         .resizable(true)
         .debug(true)
         .user_data(())
-        .invoke_handler(|webview, arg| {
+        .invoke_handler(|wv, arg| {
             use Cmd::*;
 
             match serde_json::from_str(arg).unwrap() {
                 Init => {
                     println!("ui inited");
-                    webview.eval(&format!("list_dir({})", 123)).unwrap();
+                    let files = json!(files);
+                    wv.eval(&format_callback("listDir", &files.to_string()))
+                        .unwrap();
                 }
                 Read { text } => println!("{}", text),
                 TestClick { cb } => {
                     println!("TestClick");
-                    webview.eval(&format!("{}()", cb)).unwrap();
+                    wv.eval(&format!("{}()", cb)).unwrap();
                 }
                 _ => {
                     unimplemented!();

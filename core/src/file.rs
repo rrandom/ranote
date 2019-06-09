@@ -1,4 +1,3 @@
-use std::ffi::OsString;
 use std::fs;
 use std::fs::File;
 use std::io::Read;
@@ -13,7 +12,7 @@ pub fn read_file(file: String) -> String {
     contents
 }
 
-pub fn get_files() -> Vec<OsString> {
+pub fn get_files() -> Vec<String> {
     let path = dirs::home_dir()
         .and_then(|mut h| {
             h.push(".ranote");
@@ -29,7 +28,7 @@ pub fn get_files() -> Vec<OsString> {
 
     let files: Vec<_> = fs::read_dir(path)
         .unwrap()
-        .map(|k| k.unwrap().path().into_os_string())
+        .map(|k| k.unwrap().path().into_os_string().into_string().unwrap())
         .collect();
 
     dbg!(&files);

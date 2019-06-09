@@ -13,16 +13,26 @@
     </div>
   </div>
 </template>
-<script>
-import LeftBar from '@/components/LeftBar';
-import MiddleBar from '@/components/MiddleBar';
+<script lang="ts">
+import { Component, Vue } from 'vue-property-decorator';
+import RFC from '@/RFC.ts';
+import LeftBar from '@/components/LeftBar.vue';
+import MiddleBar from '@/components/MiddleBar.vue';
 
-export default {
+@Component({
   components: {
     LeftBar,
     MiddleBar,
   },
-};
+})
+export default class App extends Vue {
+  public mounted() {
+    window.listDir = (notes: any) => {
+      console.log('listDir: ', notes);
+    };
+    RFC.init();
+  }
+}
 </script>
 <style lang="scss">
 #app {
