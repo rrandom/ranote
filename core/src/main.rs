@@ -37,6 +37,11 @@ fn main() {
                     println!("TestClick");
                     wv.eval(&format!("{}()", cb)).unwrap();
                 }
+                LoadFile { fileName, cb } => {
+                    println!("{}", fileName);
+                    let contents = file::read_file(fileName);
+                    wv.eval(&format_callback(&cb, &contents)).unwrap();
+                }
                 _ => {
                     unimplemented!();
                 }

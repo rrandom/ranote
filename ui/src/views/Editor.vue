@@ -28,6 +28,7 @@ export default class Editor extends Vue {
   }
 
   public onClick() {
+    console.log('onClick');
     window.testClickCb = () => {
       alert('testClickCb called');
     };
@@ -43,6 +44,12 @@ export default class Editor extends Vue {
       keyMap: 'emacs',
     });
     this.cm = cm;
+
+    window.loadFileCb = (fileContent) => {
+      console.log(fileContent);
+      this.cm.setValue(fileContent);
+    };
+
   }
 }
 </script>

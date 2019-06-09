@@ -1,7 +1,7 @@
 <template>
   <div id="app">
-    <LeftBar />
-    <MiddleBar />
+    <LeftBar/>
+    <MiddleBar :notes="notes" />
     <div class="editor-panel">
       <div id="nav">
         <router-link to="/">Editor</router-link> |
@@ -26,10 +26,13 @@ import MiddleBar from '@/components/MiddleBar.vue';
   },
 })
 export default class App extends Vue {
+  public notes = [];
   public mounted() {
     window.listDir = (notes: any) => {
       console.log('listDir: ', notes);
+      this.notes = notes;
     };
+    console.log('App mounted');
     RFC.init();
   }
 }

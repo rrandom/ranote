@@ -25,4 +25,8 @@ pub enum Cmd {
     TestClick {
         cb: String,
     },
+    LoadFile {
+        fileName: String,
+        cb: String,
+    },
 }

@@ -12,7 +12,8 @@ interface Command {
 
 export default class RFC {
   public static invoke(command: Command) {
-    if (external.invoke) {
+    if (external) {
+      command = { ...command, ...command.params };
       external.invoke(JSON.stringify(command));
     }
   }
@@ -27,6 +28,16 @@ export default class RFC {
   public static init() {
     this.invoke({
       cmd: 'init',
+    });
+  }
+
+  public static loadFile(fileName: string) {
+    this.invoke({
+      cmd: 'loadFile',
+      params: {
+        fileName,
+      },
+      cb: 'loadFileCb',
     });
   }
 }
