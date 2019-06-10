@@ -26,13 +26,17 @@ import MiddleBar from '@/components/MiddleBar.vue';
   },
 })
 export default class App extends Vue {
-  public notes = [];
   public mounted() {
     window.listDir = (notes: any) => {
-      this.notes = notes;
+      console.log('notes', notes);
+      this.$store.commit('setNotes', notes);
     };
     console.log('App mounted');
     RFC.init();
+  }
+
+  get notes() {
+    return this.$store.state.notes;
   }
 }
 </script>

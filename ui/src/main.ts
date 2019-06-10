@@ -1,14 +1,14 @@
 import './component-hook';
 import Vue from 'vue';
-import 'babel-polyfill';
 import App from './App.vue';
 import router from './router';
 import store from './store';
+import { Store } from 'vuex';
 
 Vue.config.productionTip = false;
 
 new Vue({
   router,
-  store,
+  store: store as Store<any>,
   render: (h) => h(App),
 }).$mount('#app');

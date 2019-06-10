@@ -10,21 +10,23 @@
   "dependencies": {
     "@types/codemirror": "^0.0.74",
     "@types/markdown-it": "^0.0.7",
-    "babel-polyfill": "^6.26.0",
     "codemirror": "^5.47.0",
+    "core-js": "^2.6.5",
     "markdown-it": "^8.4.2",
     "vue": "^2.6.10",
     "vue-class-component": "^7.0.2",
     "vue-property-decorator": "^8.1.0",
     "vue-router": "^3.0.3",
-    "vuex": "^3.0.1"
+    "vuex": "^3.0.1",
+    "vuex-typescript-interface": "^1.0.0"
   },
   "devDependencies": {
-    "@vue/cli-plugin-typescript": "^3.7.0",
-    "@vue/cli-service": "^3.7.0",
+    "@vue/cli-plugin-babel": "^3.8.0",
+    "@vue/cli-plugin-typescript": "^3.8.0",
+    "@vue/cli-service": "^3.8.0",
     "node-sass": "^4.9.0",
     "sass-loader": "^7.1.0",
     "typescript": "^3.4.3",
-    "vue-template-compiler": "^2.5.21"
+    "vue-template-compiler": "^2.6.10"
   }
 }
