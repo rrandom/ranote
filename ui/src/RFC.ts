@@ -40,4 +40,13 @@ export default class RFC {
       cb: 'loadFileCb',
     });
   }
+
+  public static saveFile(file: string, contents: string) {
+    this.invoke({
+      cmd: 'write',
+      params: {
+        file, contents,
+      },
+    });
+  }
 }

@@ -15,7 +15,7 @@
 </template>
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator';
-import RFC from '@/RFC.ts';
+import RFC from './RFC';
 import LeftBar from '@/components/LeftBar.vue';
 import MiddleBar from '@/components/MiddleBar.vue';
 
@@ -29,7 +29,6 @@ export default class App extends Vue {
   public notes = [];
   public mounted() {
     window.listDir = (notes: any) => {
-      console.log('listDir: ', notes);
       this.notes = notes;
     };
     console.log('App mounted');

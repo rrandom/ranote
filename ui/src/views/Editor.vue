@@ -47,7 +47,7 @@ export default class Editor extends Vue {
 
     window.loadFileCb = (fileContent) => {
       console.log(fileContent);
-      this.cm.setValue(fileContent);
+      this.cm!.setValue(fileContent);
     };
 
   }
