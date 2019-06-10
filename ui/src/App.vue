@@ -3,7 +3,7 @@
     <LeftBar/>
     <MiddleBar :notes="notes" />
     <div class="editor-panel">
-      <div id="nav">
+      <div class="menu-bar">
         <router-link to="/">Editor</router-link> |
         <router-link to="/preview">Preview</router-link>
       </div>
@@ -45,17 +45,27 @@ export default class App extends Vue {
 
   display: flex;
   flex-direction: row;
+  height: 95vh;
+  box-sizing: border-box;
+  overflow: hidden;
 }
 
 
-#nav {
-  padding: 30px;
+.menu-bar {
+  padding: 5px;
+  height: 30px;
+  font-size: 146x;
   a {
     font-weight: bold;
     color: #2c3e50;
     &.router-link-exact-active {
-      color: #42b983;
+      color: burlywood;
     }
   }
+}
+
+.editor-panel {
+  flex: 1 1;
+  height: calc(95vh - 30px);
 }
 </style>

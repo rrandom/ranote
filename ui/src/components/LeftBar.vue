@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="left-bar">
     left bar
   </div>
 </template>
@@ -9,3 +9,8 @@ export default {
   },
 };
 </script>
+<style lang="scss">
+.left-bar {
+  border-right: 1px solid bisque;
+}
+</style>

@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="middle-bar">
     <div
       v-for="(note, k) in notes"
       @click="onClickNote(note)"
@@ -23,3 +23,9 @@ export default class MiddleBar extends Vue {
   }
 }
 </script>
+<style lang="scss">
+.middle-bar {
+  border-right: #000 solid 1px;
+  border-left: #000 solid 1px;
+}
+</style>

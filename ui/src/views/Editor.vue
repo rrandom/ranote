@@ -1,5 +1,5 @@
 <template>
-  <div class="home" @click="onClick">
+  <div class="editor-container" @click="onClick">
   </div>
 </template>
 
@@ -44,6 +44,7 @@ export default class Editor extends Vue {
       keyMap: 'emacs',
     });
     this.cm = cm;
+    cm.setSize(null, '100%');
 
     window.loadFileCb = (fileContent) => {
       console.log(fileContent);
@@ -53,3 +54,9 @@ export default class Editor extends Vue {
   }
 }
 </script>
+<style lang="scss">
+.editor-container {
+  height: 100%;
+}
+</style>
+

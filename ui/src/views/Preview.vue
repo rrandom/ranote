@@ -1,6 +1,6 @@
 <template>
-  <div class="about" v-html="result">
-    <h1>This is an about page</h1>
+  <div class="preview-container" v-html="result">
+    <h1>This is an preview page</h1>
   </div>
 </template>
 <script lang="ts">
@@ -29,3 +29,8 @@ export default class Preview extends Vue {
   }
 }
 </script>
+<style lang="scss">
+.preview-container {
+  padding-left: 10px;
+}
+</style>
