@@ -10,7 +10,7 @@
   </div>
 </template>
 <script lang="ts">
-import { Component, Vue, Prop } from 'vue-property-decorator';
+import { Component, Vue, Prop, Emit } from 'vue-property-decorator';
 import RFC from '../RFC';
 
 @Component({
@@ -18,8 +18,8 @@ import RFC from '../RFC';
 export default class MiddleBar extends Vue {
   @Prop() public notes!: string;
 
+  @Emit()
   public onClickNote(name: string) {
-    RFC.loadFile(name);
   }
 }
 </script>

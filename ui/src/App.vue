@@ -1,7 +1,7 @@
 <template>
   <div id="app">
     <LeftBar/>
-    <MiddleBar :notes="notes" />
+    <MiddleBar :notes="notes" @on-click-note="onClickNote" />
     <div class="editor-panel">
       <div class="menu-bar">
         <router-link to="/">Editor</router-link> |
@@ -19,6 +19,8 @@ import RFC from './RFC';
 import LeftBar from '@/components/LeftBar.vue';
 import MiddleBar from '@/components/MiddleBar.vue';
 
+import store from './store';
+
 @Component({
   components: {
     LeftBar,
@@ -26,17 +28,22 @@ import MiddleBar from '@/components/MiddleBar.vue';
   },
 })
 export default class App extends Vue {
+
   public mounted() {
     window.listDir = (notes: any) => {
       console.log('notes', notes);
-      this.$store.commit('setNotes', notes);
+      store.commit('setNotes', notes);
     };
-    console.log('App mounted');
+    console.log('App mounted');    
     RFC.init();
   }
 
   get notes() {
-    return this.$store.state.notes;
+    return store.state.notes;
+  }
+
+  public onClickNote(name: string) {
+    RFC.loadFile(name);
   }
 }
 </script>

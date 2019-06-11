@@ -8,6 +8,8 @@ import { Component, Vue } from 'vue-property-decorator';
 import { Route } from 'vue-router';
 import Markdown from 'markdown-it';
 
+import store from '../store';
+
 @Component({
 })
 export default class Preview extends Vue {
@@ -18,7 +20,8 @@ export default class Preview extends Vue {
   }
 
   public beforeRouteEnter(to: Route, from: Route, next: any) {
-    const content = window.localStorage.getItem('content');
+    const content = store.state.currentNote.contents;
+
     console.log(content);
     const md = new Markdown();
     const result = md.render(content as string);

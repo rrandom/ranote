@@ -13,6 +13,7 @@ import 'codemirror/lib/codemirror.css';
 import 'codemirror/theme/midnight.css';
 import 'codemirror/keymap/emacs';
 
+import store from '../store';
 import RFC from '../RFC';
 
 @Component({
@@ -23,7 +24,12 @@ export default class Editor extends Vue {
 
   public beforeRouteLeave(to: Route, from: Route, next: any) {
     const value = this.cm!.getDoc().getValue();
-    window.localStorage.setItem('content', value);
+
+    store.commit('setCurrentNote', {
+      name: store.state.currentNote.name,
+      contents: value
+    });
+
     next();
   }
 
@@ -46,9 +52,13 @@ export default class Editor extends Vue {
     this.cm = cm;
     cm.setSize(null, '100%');
 
-    window.loadFileCb = (fileContent) => {
-      console.log(fileContent);
-      this.cm!.setValue(fileContent);
+    window.loadFileCb = (file: {
+      name: string;
+      contents: string;
+    }) => {
+      console.log(file);
+      store.commit('setCurrentNote', file);
+      this.cm!.setValue(JSON.parse(file.contents));
     };
 
   }
