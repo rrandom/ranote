@@ -25,10 +25,14 @@ export default class Editor extends Vue {
   public beforeRouteLeave(to: Route, from: Route, next: any) {
     const value = this.cm!.getDoc().getValue();
 
+    const name = store.state.currentNote!.name;
+
     store.commit('setCurrentNote', {
-      name: store.state.currentNote!.name,
+      name,
       contents: value,
     });
+
+    RFC.saveFile(name, value);
 
     next();
   }
@@ -36,7 +40,7 @@ export default class Editor extends Vue {
   public onClick() {
     console.log('onClick');
     window.testClickCb = () => {
-      alert('testClickCb called');
+      // alert('testClickCb called');
     };
     RFC.testClick();
   }

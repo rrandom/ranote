@@ -5,7 +5,7 @@ pub enum Cmd {
     Read {
         text: String,
     },
-    Write {
+    SaveFile {
         file: String,
         contents: String,
     },

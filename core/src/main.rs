@@ -10,6 +10,8 @@ mod file;
 mod utils;
 use cmd::Cmd;
 use utils::format_callback;
+use std::fs::File;
+use std::io::Write;
 
 fn main() {
     let files = file::get_files();
@@ -33,6 +35,10 @@ fn main() {
                         .unwrap();
                 }
                 Read { text } => println!("{}", text),
+                SaveFile { file, contents } => {
+                    let mut f = File::create(file).unwrap();
+                    f.write_all(contents.as_bytes());
+                }
                 TestClick { cb } => {
                     println!("TestClick");
                     wv.eval(&format!("{}()", cb)).unwrap();

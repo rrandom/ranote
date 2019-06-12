@@ -43,7 +43,7 @@ export default class RFC {
 
   public static saveFile(file: string, contents: string) {
     this.invoke({
-      cmd: 'write',
+      cmd: 'saveFile',
       params: {
         file, contents,
       },
