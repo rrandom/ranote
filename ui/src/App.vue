@@ -34,7 +34,7 @@ export default class App extends Vue {
       console.log('notes', notes);
       store.commit('setNotes', notes);
     };
-    console.log('App mounted');    
+    console.log('App mounted');
     RFC.init();
   }
 
@@ -43,6 +43,13 @@ export default class App extends Vue {
   }
 
   public onClickNote(name: string) {
+    window.loadFileCb = (file: {
+      name: string;
+      contents: string;
+    }) => {
+      console.log(file);
+      store.commit('setCurrentNote', file);
+    };
     RFC.loadFile(name);
   }
 }

@@ -4,7 +4,7 @@
 </template>
 
 <script lang="ts">
-import { Component, Vue } from 'vue-property-decorator';
+import { Component, Vue, Watch } from 'vue-property-decorator';
 import { Route } from 'vue-router';
 
 import CodeMirror from 'codemirror';
@@ -26,8 +26,8 @@ export default class Editor extends Vue {
     const value = this.cm!.getDoc().getValue();
 
     store.commit('setCurrentNote', {
-      name: store.state.currentNote.name,
-      contents: value
+      name: store.state.currentNote!.name,
+      contents: value,
     });
 
     next();
@@ -41,6 +41,11 @@ export default class Editor extends Vue {
     RFC.testClick();
   }
 
+  @Watch('$store.state.currentNote')
+  public onNoteChanged(val: any, oldVal: any) {
+    this.cm!.setValue(val.contents);
+  }
+
   public mounted() {
     const cm = CodeMirror(this.$el as HTMLElement, {
       value: 'function myScript(){return 100;}\n',
@@ -51,16 +56,6 @@ export default class Editor extends Vue {
     });
     this.cm = cm;
     cm.setSize(null, '100%');
-
-    window.loadFileCb = (file: {
-      name: string;
-      contents: string;
-    }) => {
-      console.log(file);
-      store.commit('setCurrentNote', file);
-      this.cm!.setValue(JSON.parse(file.contents));
-    };
-
   }
 }
 </script>

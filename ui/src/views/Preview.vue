@@ -4,9 +4,9 @@
   </div>
 </template>
 <script lang="ts">
-import { Component, Vue } from 'vue-property-decorator';
+import { Component, Vue, Watch } from 'vue-property-decorator';
 import { Route } from 'vue-router';
-import Markdown from 'markdown-it';
+import MarkdownIt from 'markdown-it';
 
 import store from '../store';
 
@@ -15,20 +15,22 @@ import store from '../store';
 export default class Preview extends Vue {
 
   public result = '';
+  public md: null | MarkdownIt = null;
 
-  public mounted() {
+  public updateContent(contents: string) {
+    this.result = this.md!.render(contents);
   }
 
-  public beforeRouteEnter(to: Route, from: Route, next: any) {
-    const content = store.state.currentNote.contents;
+  public mounted() {
+    this.md = new MarkdownIt();
+    if (store.state.currentNote) {
+      this.updateContent(store.state.currentNote.contents);
+    }
+  }
 
-    console.log(content);
-    const md = new Markdown();
-    const result = md.render(content as string);
-    console.log(result);
-    next((vm: Preview) => {
-      vm.result = result;
-    });
+  @Watch('$store.state.currentNote')
+  public onNoteChanged(val: any, oldVal: any) {
+    this.updateContent(val.contents);
   }
 }
 </script>

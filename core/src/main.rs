@@ -40,7 +40,7 @@ fn main() {
                 LoadFile { fileName, cb } => {
                     println!("{}", fileName);
                     let contents = file::read_file(fileName.clone());
-                    let params = json!({ "name": fileName, "contents": &contents });
+                    let params = json!({ "name": fileName, "contents": contents });
                     println!("{}", params);
 
                     wv.eval(&format_callback(&cb, &params.to_string())).unwrap();
