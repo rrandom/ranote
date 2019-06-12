@@ -1,5 +1,6 @@
 <template>
-  <div class="preview-container" v-html="result">
+  <div class="preview-container">
+    <div v-html="result"></div>
     <h1>This is an preview page</h1>
   </div>
 </template>
@@ -37,5 +38,7 @@ export default class Preview extends Vue {
 <style lang="scss">
 .preview-container {
   padding-left: 10px;
+  overflow: scroll;
+  max-height: 100vh;
 }
 </style>
