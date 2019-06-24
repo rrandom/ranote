@@ -6,15 +6,15 @@ extern crate serde_json;
 use serde_json::json;
 
 mod cmd;
+mod error;
 mod file;
 mod utils;
-mod error;
 
 use cmd::Cmd;
-use utils::format_callback;
+use error::Result;
 use std::fs::File;
 use std::io::Write;
-use error::Result;
+use utils::format_callback;
 
 fn main() -> Result<()> {
     let files = file::get_files();
