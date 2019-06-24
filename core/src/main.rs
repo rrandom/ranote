@@ -8,12 +8,15 @@ use serde_json::json;
 mod cmd;
 mod file;
 mod utils;
+mod error;
+
 use cmd::Cmd;
 use utils::format_callback;
 use std::fs::File;
 use std::io::Write;
+use error::Result;
 
-fn main() {
+fn main() -> Result<()> {
     let files = file::get_files();
 
     web_view::builder()
@@ -27,21 +30,20 @@ fn main() {
         .invoke_handler(|wv, arg| {
             use Cmd::*;
 
-            match serde_json::from_str(arg).unwrap() {
+            match serde_json::from_str(arg).expect("Could not get command") {
                 Init => {
                     println!("ui inited");
                     let files = json!(files);
-                    wv.eval(&format_callback("listDir", &files.to_string()))
-                        .unwrap();
+                    wv.eval(&format_callback("listDir", &files.to_string()))?;
                 }
                 Read { text } => println!("{}", text),
                 SaveFile { file, contents } => {
-                    let mut f = File::create(file).unwrap();
+                    let mut f = File::create(file).expect("Could not create file");
                     f.write_all(contents.as_bytes());
                 }
                 TestClick { cb } => {
                     println!("TestClick");
-                    wv.eval(&format!("{}()", cb)).unwrap();
+                    wv.eval(&format!("{}()", cb))?;
                 }
                 LoadFile { fileName, cb } => {
                     println!("{}", fileName);
@@ -49,7 +51,7 @@ fn main() {
                     let params = json!({ "name": fileName, "contents": contents });
                     println!("{}", params);
 
-                    wv.eval(&format_callback(&cb, &params.to_string())).unwrap();
+                    wv.eval(&format_callback(&cb, &params.to_string()))?;
                 }
                 _ => {
                     unimplemented!();
@@ -57,6 +59,7 @@ fn main() {
             }
             Ok(())
         })
-        .run()
-        .unwrap();
+        .run()?;
+
+    Ok(())
 }
