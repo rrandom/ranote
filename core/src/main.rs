@@ -1,19 +1,7 @@
-#[macro_use]
-extern crate serde_derive;
-
+use ranote_core::{cmd::Cmd, error::Result, file, utils::format_callback};
 use serde_json::json;
-
-mod cmd;
-mod error;
-mod file;
-mod utils;
-mod doc;
-
-use cmd::Cmd;
-use error::Result;
 use std::fs::File;
 use std::io::Write;
-use utils::format_callback;
 
 fn main() -> Result<()> {
     let files = file::get_files();
@@ -38,7 +26,7 @@ fn main() -> Result<()> {
                 Read { text } => println!("{}", text),
                 SaveFile { file, contents } => {
                     let mut f = File::create(file).expect("Could not create file");
-                    f.write_all(contents.as_bytes());
+                    f.write_all(contents.as_bytes()).unwrap();
                 }
                 TestClick { cb } => {
                     println!("TestClick");
