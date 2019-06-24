@@ -1,7 +1,5 @@
 #[macro_use]
 extern crate serde_derive;
-#[macro_use]
-extern crate serde_json;
 
 use serde_json::json;
 
@@ -9,6 +7,7 @@ mod cmd;
 mod error;
 mod file;
 mod utils;
+mod doc;
 
 use cmd::Cmd;
 use error::Result;
