@@ -6,3 +6,4 @@ pub mod error;
 pub mod file;
 pub mod note;
 pub mod utils;
+pub mod wkspace;

@@ -113,9 +113,3 @@ impl Note {
         unimplemented!();
     }
 }
-
-pub struct DocList {
-    docs: BTreeMap<String, Note>,
-    tags: BTreeSet<String>,
-    workspace_path: PathBuf,
-}

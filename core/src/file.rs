@@ -1,4 +1,4 @@
-use crate::note::{Note, NoteItem};
+use crate::note::Note;
 use std::fs;
 use std::fs::File;
 use std::io::Read;
