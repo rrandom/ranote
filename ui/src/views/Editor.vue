@@ -25,10 +25,10 @@ export default class Editor extends Vue {
   public beforeRouteLeave(to: Route, from: Route, next: any) {
     const value = this.cm!.getDoc().getValue();
 
-    const name = store.state.currentNote!.name;
+    const currentNote = store.state.currentNote!;
 
     store.commit('setCurrentNote', {
-      name,
+      ...currentNote,
       contents: value,
     });
 

@@ -10,6 +10,11 @@ interface Command {
   cb?: string;
 }
 
+interface Doc {
+  name: string,
+  path: string,
+}
+
 export default class RFC {
   public static invoke(command: Command) {
     if (external) {
@@ -31,21 +36,22 @@ export default class RFC {
     });
   }
 
-  public static loadFile(fileName: string) {
+  public static loadFile(doc: Doc) {
     this.invoke({
       cmd: 'loadFile',
       params: {
-        fileName,
+        fileName: doc.path,
       },
       cb: 'loadFileCb',
     });
   }
 
-  public static saveFile(file: string, contents: string) {
+  public static saveFile(doc: Doc, contents: string) {
     this.invoke({
       cmd: 'saveFile',
       params: {
-        file, contents,
+        file: doc.path,
+        contents,
       },
     });
   }

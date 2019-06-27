@@ -20,7 +20,10 @@ fn main() -> Result<()> {
             match serde_json::from_str(arg).expect("Could not get command") {
                 Init => {
                     println!("ui inited");
-                    let files = json!(files);
+
+                    let file_names: Vec<_> = files.iter().map(|f| f.get_json_value().unwrap()).collect();
+
+                    let files =  serde_json::to_string(&file_names).unwrap();
                     wv.eval(&format_callback("listDir", &files.to_string()))?;
                 }
                 Read { text } => println!("{}", text),

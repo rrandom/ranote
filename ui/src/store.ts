@@ -1,21 +1,17 @@
 import Vue from 'vue';
 import Vuex, { createHelpers } from 'vuex-typescript-interface';
+import { Note } from './types';
 
 Vue.use(Vuex);
 
-interface Note {
-  name: string;
-  contents: string;
-}
-
 interface IStore {
   // State (are non-function properties not marked readonly)
-  notes: string[];
+  notes: Note[];
   currentNote: null | Note;
   // Getters (are non-function properties marked readonly)
 
   // Mutations (functions return void and optionally accept payload)
-  setNotes(notes: string[]): void;
+  setNotes(notes: Note[]): void;
   setCurrentNote(note: Note): void;
 }
 

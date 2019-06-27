@@ -1,7 +1,7 @@
 use std::fs;
 use std::fs::File;
 use std::io::Read;
-use std::io::Write;
+use crate::doc::{Doc, UiDoc};
 
 pub fn read_file(file: String) -> String {
     let path = file.clone();
@@ -13,7 +13,7 @@ pub fn read_file(file: String) -> String {
     contents
 }
 
-pub fn get_files() -> Vec<String> {
+pub fn get_files() -> Vec<Doc> {
     let path = dirs::home_dir()
         .and_then(|mut h| {
             h.push(".ranote");
@@ -29,9 +29,10 @@ pub fn get_files() -> Vec<String> {
 
     let files: Vec<_> = fs::read_dir(path)
         .unwrap()
-        .map(|k| k.unwrap().path().into_os_string().into_string().unwrap())
+        .map(|k| {
+            Doc::open(k.unwrap().path()).unwrap()
+        })
         .collect();
 
-    dbg!(&files);
     files
 }

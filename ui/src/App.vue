@@ -18,7 +18,7 @@ import { Component, Vue } from 'vue-property-decorator';
 import RFC from './RFC';
 import LeftBar from '@/components/LeftBar.vue';
 import MiddleBar from '@/components/MiddleBar.vue';
-
+import { Note } from './types';
 import store from './store';
 
 @Component({
@@ -30,7 +30,7 @@ import store from './store';
 export default class App extends Vue {
 
   public mounted() {
-    window.listDir = (notes: any) => {
+    window.listDir = (notes: Note[]) => {
       console.log('notes', notes);
       store.commit('setNotes', notes);
     };
@@ -42,15 +42,12 @@ export default class App extends Vue {
     return store.state.notes;
   }
 
-  public onClickNote(name: string) {
-    window.loadFileCb = (file: {
-      name: string;
-      contents: string;
-    }) => {
+  public onClickNote(note: Note) {
+    window.loadFileCb = (file: Note) => {
       console.log(file);
       store.commit('setCurrentNote', file);
     };
-    RFC.loadFile(name);
+    RFC.loadFile(note);
   }
 }
 </script>
