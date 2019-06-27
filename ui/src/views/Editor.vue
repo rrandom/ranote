@@ -6,6 +6,7 @@
 <script lang="ts">
 import { Component, Vue, Watch } from 'vue-property-decorator';
 import { Route } from 'vue-router';
+import { Note } from '../types';
 
 import CodeMirror from 'codemirror';
 import 'codemirror/mode/markdown/markdown';
@@ -29,10 +30,10 @@ export default class Editor extends Vue {
 
     store.commit('setCurrentNote', {
       ...currentNote,
-      contents: value,
+      content: value,
     });
 
-    RFC.saveFile(name, value);
+    RFC.saveNote(currentNote, value);
 
     next();
   }
@@ -46,8 +47,8 @@ export default class Editor extends Vue {
   }
 
   @Watch('$store.state.currentNote')
-  public onNoteChanged(val: any, oldVal: any) {
-    this.cm!.setValue(val.contents);
+  public onNoteChanged(note: Note) {
+    this.cm!.setValue(note.content as string);
   }
 
   public mounted() {

@@ -43,11 +43,11 @@ export default class App extends Vue {
   }
 
   public onClickNote(note: Note) {
-    window.loadFileCb = (file: Note) => {
-      console.log(file);
-      store.commit('setCurrentNote', file);
+    window.loadNoteCb = (note: Note) => {
+      console.log(note);
+      store.commit('setCurrentNote', note);
     };
-    RFC.loadFile(note);
+    RFC.loadNote(note);
   }
 }
 </script>
@@ -64,7 +64,6 @@ export default class App extends Vue {
   box-sizing: border-box;
   overflow: hidden;
 }
-
 
 .menu-bar {
   padding: 5px;

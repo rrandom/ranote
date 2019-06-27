@@ -1,18 +1,18 @@
 use crate::error::Result;
+use failure;
+use serde::{Deserialize, Serialize};
 use std::collections::{BTreeMap, BTreeSet};
 use std::fs::{File, OpenOptions};
 use std::io::{BufReader, BufWriter, Read, Write};
 use std::path::{Path, PathBuf};
-use failure::{self};
-use serde::{Deserialize, Serialize};
 
 #[derive(Serialize, Deserialize)]
-pub struct UiDoc {
+pub struct NoteItem {
     path: String,
     name: String,
 }
 
-pub struct Doc {
+pub struct Note {
     path: PathBuf,
     name: String,
     pub content: String,
@@ -20,7 +20,7 @@ pub struct Doc {
     tags: BTreeSet<String>,
 }
 
-impl Doc {
+impl Note {
     pub fn open<T: AsRef<Path>>(path: T) -> Result<Self> {
         let path = path.as_ref();
 
@@ -28,15 +28,12 @@ impl Doc {
             unreachable!();
         }
 
-        let f = OpenOptions::new()
-            .write(true)
-            .read(true)
-            .open(&path)?;
+        let f = OpenOptions::new().write(true).read(true).open(&path)?;
 
         let writer = BufWriter::new(f);
         let name = path.file_name().unwrap().to_os_string();
 
-        let mut doc = Doc {
+        let mut doc = Note {
             path: PathBuf::from(path),
             name: name.into_string().unwrap(),
             content: String::from(""),
@@ -64,7 +61,7 @@ impl Doc {
 
         let writer = BufWriter::new(f);
 
-        Ok(Doc {
+        Ok(Note {
             path: PathBuf::from(path),
             name: String::from(name),
             content: String::from(""),
@@ -77,10 +74,10 @@ impl Doc {
         self.name.as_str()
     }
 
-    pub fn get_json_value(&self) -> Result<UiDoc> {
-        Ok(UiDoc {
+    pub fn get_json_value(&self) -> Result<NoteItem> {
+        Ok(NoteItem {
             path: String::from(self.path.to_str().unwrap()),
-            name: self.name.clone()
+            name: self.name.clone(),
         })
     }
 
@@ -118,7 +115,7 @@ impl Doc {
 }
 
 pub struct DocList {
-    docs: BTreeMap<String, Doc>,
+    docs: BTreeMap<String, Note>,
     tags: BTreeSet<String>,
     workspace_path: PathBuf,
 }

@@ -4,7 +4,7 @@ use std::fs::File;
 use std::io::Write;
 
 fn main() -> Result<()> {
-    let files = file::get_files();
+    let notes = file::get_files();
 
     web_view::builder()
         .title("Ranote")
@@ -21,27 +21,26 @@ fn main() -> Result<()> {
                 Init => {
                     println!("ui inited");
 
-                    let file_names: Vec<_> = files.iter().map(|f| f.get_json_value().unwrap()).collect();
-
-                    let files =  serde_json::to_string(&file_names).unwrap();
+                    let file_names: Vec<_> =
+                        notes.iter().map(|f| f.get_json_value().unwrap()).collect();
+                    let files = serde_json::to_string(&file_names).unwrap();
                     wv.eval(&format_callback("listDir", &files.to_string()))?;
                 }
-                Read { text } => println!("{}", text),
-                SaveFile { file, contents } => {
+                SaveNote { file, content } => {
                     let mut f = File::create(file).expect("Could not create file");
-                    f.write_all(contents.as_bytes()).unwrap();
+                    f.write_all(content.as_bytes()).unwrap();
+                }
+                LoadNote { path, cb } => {
+                    dbg!(&path);
+                    let contents = file::read_file(path.clone());
+                    let params = json!({ "path": path, "content": contents });
+                    // println!("{}", params);
+
+                    wv.eval(&format_callback(&cb, &params.to_string()))?;
                 }
                 TestClick { cb } => {
                     println!("TestClick");
                     wv.eval(&format!("{}()", cb))?;
-                }
-                LoadFile { fileName, cb } => {
-                    println!("{}", fileName);
-                    let contents = file::read_file(fileName.clone());
-                    let params = json!({ "name": fileName, "contents": contents });
-                    println!("{}", params);
-
-                    wv.eval(&format_callback(&cb, &params.to_string()))?;
                 }
                 _ => {
                     unimplemented!();

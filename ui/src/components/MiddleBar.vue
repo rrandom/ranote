@@ -5,21 +5,22 @@
       @click="onClickNote(note)"
       :key="k"
     >
-      {{ note }}
+      {{ note.name }}
     </div>
   </div>
 </template>
 <script lang="ts">
 import { Component, Vue, Prop, Emit } from 'vue-property-decorator';
 import RFC from '../RFC';
+import { Note } from '../types';
 
 @Component({
 })
 export default class MiddleBar extends Vue {
-  @Prop() public notes!: string;
+  @Prop() public notes!: Note;
 
   @Emit()
-  public onClickNote(name: string) {
+  public onClickNote(name: Note) {
   }
 }
 </script>

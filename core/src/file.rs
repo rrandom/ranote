@@ -1,7 +1,7 @@
+use crate::note::{Note, NoteItem};
 use std::fs;
 use std::fs::File;
 use std::io::Read;
-use crate::doc::{Doc, UiDoc};
 
 pub fn read_file(file: String) -> String {
     let path = file.clone();
@@ -13,7 +13,7 @@ pub fn read_file(file: String) -> String {
     contents
 }
 
-pub fn get_files() -> Vec<Doc> {
+pub fn get_files() -> Vec<Note> {
     let path = dirs::home_dir()
         .and_then(|mut h| {
             h.push(".ranote");
@@ -29,9 +29,7 @@ pub fn get_files() -> Vec<Doc> {
 
     let files: Vec<_> = fs::read_dir(path)
         .unwrap()
-        .map(|k| {
-            Doc::open(k.unwrap().path()).unwrap()
-        })
+        .map(|k| Note::open(k.unwrap().path()).unwrap())
         .collect();
 
     files

@@ -11,8 +11,8 @@ interface Command {
 }
 
 interface Doc {
-  name: string,
-  path: string,
+  name: string;
+  path: string;
 }
 
 export default class RFC {
@@ -36,22 +36,22 @@ export default class RFC {
     });
   }
 
-  public static loadFile(doc: Doc) {
+  public static loadNote(doc: Doc) {
     this.invoke({
-      cmd: 'loadFile',
+      cmd: 'loadNote',
       params: {
-        fileName: doc.path,
+        path: doc.path,
       },
-      cb: 'loadFileCb',
+      cb: 'loadNoteCb',
     });
   }
 
-  public static saveFile(doc: Doc, contents: string) {
+  public static saveNote(doc: Doc, content: string) {
     this.invoke({
-      cmd: 'saveFile',
+      cmd: 'saveNote',
       params: {
         file: doc.path,
-        contents,
+        content,
       },
     });
   }

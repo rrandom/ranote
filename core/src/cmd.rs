@@ -5,9 +5,9 @@ pub enum Cmd {
     Read {
         text: String,
     },
-    SaveFile {
+    SaveNote {
         file: String,
-        contents: String,
+        content: String,
     },
     List {
         path: String,
@@ -25,8 +25,8 @@ pub enum Cmd {
     TestClick {
         cb: String,
     },
-    LoadFile {
-        fileName: String,
+    LoadNote {
+        path: String,
         cb: String,
     },
 }
