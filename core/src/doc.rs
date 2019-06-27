@@ -120,4 +120,5 @@ impl Doc {
 pub struct DocList {
     docs: BTreeMap<String, Doc>,
     tags: BTreeSet<String>,
+    workspace_path: PathBuf,
 }
