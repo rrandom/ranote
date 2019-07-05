@@ -4,6 +4,6 @@ module.exports = {
     sourceMap: true
   },
   devServer: {
-    port: 8081
+    port: 8085
   },
 }

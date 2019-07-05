@@ -2,6 +2,7 @@ use crate::note::Note;
 use std::fs;
 use std::fs::File;
 use std::io::Read;
+use std::path::PathBuf;
 
 pub fn read_file(file: String) -> String {
     let path = file.clone();
@@ -11,6 +12,17 @@ pub fn read_file(file: String) -> String {
         .expect("Unable to read the file");
     // serde_json::to_string(&contents).unwrap().to_string()
     contents
+}
+
+pub fn get_wk_dir() -> PathBuf {
+    let osstr = dirs::home_dir()
+        .and_then(|mut h| {
+            h.push(".ranote");
+            Some(h.into_os_string())
+        })
+        .expect("cant get wkdir");
+
+    PathBuf::from(osstr)
 }
 
 pub fn get_files() -> Vec<Note> {

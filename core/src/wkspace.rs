@@ -1,5 +1,5 @@
 use crate::error::Result;
-use crate::note::Note;
+use crate::note::{Note, NoteItem};
 use std::collections::{BTreeMap, BTreeSet};
 use std::fs;
 use std::path::{Path, PathBuf};
@@ -18,11 +18,9 @@ impl Wkspace {
             .expect("could not read dir")
             .map(|p| {
                 let note_path = p.unwrap().path();
+                let note = Note::open(note_path).expect("could not open note");
 
-                (
-                    note_path.to_str().unwrap().to_string(),
-                    Note::open(note_path).unwrap(),
-                )
+                (note.get_name().to_owned(), note)
             })
             .collect();
 
@@ -31,5 +29,14 @@ impl Wkspace {
             notes,
             tags: BTreeSet::new(),
         })
+    }
+
+    pub fn get_notes_names(&self) -> Result<Vec<NoteItem>> {
+        let mut names: Vec<_> = self
+            .notes
+            .values()
+            .map(|note| note.get_json_value().unwrap())
+            .collect();
+        Ok(names)
     }
 }
