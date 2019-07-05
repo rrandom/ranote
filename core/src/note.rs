@@ -1,7 +1,7 @@
 use crate::error::Result;
 use std::collections::BTreeSet;
 use std::fs::{File, OpenOptions};
-use std::io::{BufWriter, Read, Write, SeekFrom, Seek};
+use std::io::{BufWriter, Read, Seek, SeekFrom, Write};
 use std::path::{Path, PathBuf};
 
 #[derive(Serialize, Deserialize)]
