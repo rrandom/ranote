@@ -102,7 +102,9 @@ impl Note {
     }
 
     pub fn write(&mut self, content: String) -> Result<()> {
-        write!(self.writer, "{}", &content)?;
+        // write!(self.writer, "{}", &content)?;
+        self.writer.write_all(&content.as_bytes())?;
+        self.writer.flush()?;
         self.content = content;
         Ok(())
     }

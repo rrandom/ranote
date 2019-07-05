@@ -1,7 +1,17 @@
 use ranote_core::{cmd::Cmd, error::Result, utils, wkspace::Wkspace};
 use serde_json::json;
 
+#[macro_use]
+extern crate slog;
+extern crate slog_term;
+use slog::Drain;
+use std::sync::Mutex;
+
 fn main() -> Result<()> {
+    let decorator = slog_term::TermDecorator::new().build();
+    let drain = Mutex::new(slog_term::FullFormat::new(decorator).build()).fuse();
+    let root_log = slog::Logger::root(drain, o!("version" => env!("CARGO_PKG_VERSION")));
+
     let wkspace_path = utils::get_wk_dir();
     let mut wkspace = Wkspace::open(wkspace_path)?;
 
@@ -19,8 +29,7 @@ fn main() -> Result<()> {
 
             match serde_json::from_str(arg).expect("Could not get command") {
                 Init => {
-                    dbg!("ui inited");
-
+                    info!(root_log, "ui inited");
                     let notes = wkspace.get_notes_names().expect("could not get names");
                     let notes = serde_json::to_string(&notes).unwrap();
                     wv.eval(&format_callback("listDir", &notes.to_string()))?;
@@ -28,13 +37,14 @@ fn main() -> Result<()> {
                 SaveNote { name, content } => {
                     let note = wkspace.get_note_by_name(&name).expect("could not get note");
                     note.write(content).expect("can not write");
+                    info!(root_log, "Note Saved"; "name" => &name);
                 }
                 LoadNote { name, cb } => {
-                    dbg!("load{}", &name);
                     let note = wkspace.get_note_by_name(&name).expect("could not get note");
                     let content = note.get_content().expect("no content");
                     let params = json!({ "name": note.get_name(), "path": note.get_path(), "content": content });
                     wv.eval(&format_callback(&cb, &params.to_string()))?;
+                    info!(root_log, "Note Loaded"; "name" => &name);
                 }
                 TestClick { cb } => {
                     println!("TestClick");
