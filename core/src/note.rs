@@ -1,7 +1,7 @@
 use crate::error::Result;
 use std::collections::BTreeSet;
 use std::fs::{File, OpenOptions};
-use std::io::{BufWriter, Read, Write};
+use std::io::{BufWriter, Read, Write, SeekFrom, Seek};
 use std::path::{Path, PathBuf};
 
 #[derive(Serialize, Deserialize)]
@@ -102,7 +102,7 @@ impl Note {
     }
 
     pub fn write(&mut self, content: String) -> Result<()> {
-        // write!(self.writer, "{}", &content)?;
+        self.writer.seek(SeekFrom::Start(0))?;
         self.writer.write_all(&content.as_bytes())?;
         self.writer.flush()?;
         self.content = content;
