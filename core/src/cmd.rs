@@ -2,15 +2,12 @@
 #[serde(tag = "cmd", rename_all = "camelCase")]
 pub enum Cmd {
     Init,
-    Read {
-        text: String,
-    },
     SaveNote {
-        file: String,
+        name: String,
         content: String,
     },
-    List {
-        path: String,
+    LoadNote {
+        name: String,
         cb: String,
     },
     ListDirs {
@@ -23,10 +20,6 @@ pub enum Cmd {
         path: String,
     },
     TestClick {
-        cb: String,
-    },
-    LoadNote {
-        name: String,
         cb: String,
     },
 }

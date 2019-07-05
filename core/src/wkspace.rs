@@ -44,7 +44,9 @@ impl Wkspace {
         Ok(self.workspace_path.as_ref())
     }
 
-    pub fn get_note_by_name(&self, name: &str) -> Result<&Note> {
-        self.notes.get(name).ok_or_else(|| failure::err_msg("no note"))
+    pub fn get_note_by_name(&mut self, name: &str) -> Result<&mut Note> {
+        self.notes
+            .get_mut(name)
+            .ok_or_else(|| failure::err_msg("no note"))
     }
 }
