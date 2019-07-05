@@ -1,9 +1,7 @@
 use crate::error::Result;
-use failure;
-use serde::{Deserialize, Serialize};
-use std::collections::{BTreeMap, BTreeSet};
+use std::collections::BTreeSet;
 use std::fs::{File, OpenOptions};
-use std::io::{BufReader, BufWriter, Read, Write};
+use std::io::{BufWriter, Read, Write};
 use std::path::{Path, PathBuf};
 
 #[derive(Serialize, Deserialize)]
@@ -15,7 +13,7 @@ pub struct NoteItem {
 pub struct Note {
     path: PathBuf,
     name: String,
-    pub content: String,
+    content: String,
     writer: BufWriter<File>,
     tags: BTreeSet<String>,
 }
@@ -33,7 +31,7 @@ impl Note {
         let writer = BufWriter::new(f);
         let name = path.file_name().unwrap().to_os_string();
 
-        let mut doc = Note {
+        let mut note = Note {
             path: PathBuf::from(path),
             name: name.into_string().unwrap(),
             content: String::from(""),
@@ -41,9 +39,9 @@ impl Note {
             tags: BTreeSet::new(),
         };
 
-        doc.read()?;
+        note.read()?;
 
-        Ok(doc)
+        Ok(note)
     }
 
     pub fn new<T: AsRef<Path>>(path: T, name: &str) -> Result<Self> {
@@ -62,7 +60,7 @@ impl Note {
         let writer = BufWriter::new(f);
 
         Ok(Note {
-            path: PathBuf::from(path),
+            path,
             name: String::from(name),
             content: String::from(""),
             writer,
@@ -74,9 +72,13 @@ impl Note {
         self.name.as_str()
     }
 
+    pub fn get_path(&self) -> String {
+        String::from(self.path.to_str().unwrap())
+    }
+
     pub fn get_json_value(&self) -> Result<NoteItem> {
         Ok(NoteItem {
-            path: String::from(self.path.to_str().unwrap()),
+            path: self.get_path(),
             name: self.name.clone(),
         })
     }

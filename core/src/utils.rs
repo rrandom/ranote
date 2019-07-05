@@ -21,3 +21,14 @@ pub fn create_config() -> PathBuf {
         config_file
     }
 }
+
+pub fn get_wk_dir() -> PathBuf {
+    let osstr = dirs::home_dir()
+        .and_then(|mut h| {
+            h.push(".ranote");
+            Some(h.into_os_string())
+        })
+        .expect("cant get wkdir");
+
+    PathBuf::from(osstr)
+}

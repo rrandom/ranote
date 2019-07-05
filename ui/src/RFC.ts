@@ -10,7 +10,7 @@ interface Command {
   cb?: string;
 }
 
-interface Doc {
+interface Note {
   name: string;
   path: string;
 }
@@ -36,21 +36,21 @@ export default class RFC {
     });
   }
 
-  public static loadNote(doc: Doc) {
+  public static loadNote(note: Note) {
     this.invoke({
       cmd: 'loadNote',
       params: {
-        path: doc.path,
+        name: note.name,
       },
       cb: 'loadNoteCb',
     });
   }
 
-  public static saveNote(doc: Doc, content: string) {
+  public static saveNote(note: Note, content: string) {
     this.invoke({
       cmd: 'saveNote',
       params: {
-        file: doc.path,
+        file: note.path,
         content,
       },
     });

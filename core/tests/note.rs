@@ -9,11 +9,11 @@ fn create_new_note() -> Result<()> {
     drop(note);
 
     let mut note = Note::open(temp_dir.path().join("tmp"))?;
-    assert_eq!(note.content, "");
+    assert_eq!(note.get_content().unwrap(), "");
 
     note.write("test content".to_owned())?;
 
-    assert_eq!(note.content.as_str(), "test content");
+    assert_eq!(note.get_content().unwrap().as_str(), "test content");
 
     Ok(())
 }

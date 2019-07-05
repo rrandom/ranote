@@ -26,7 +26,7 @@ pub enum Cmd {
         cb: String,
     },
     LoadNote {
-        path: String,
+        name: String,
         cb: String,
     },
 }

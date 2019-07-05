@@ -32,11 +32,19 @@ impl Wkspace {
     }
 
     pub fn get_notes_names(&self) -> Result<Vec<NoteItem>> {
-        let mut names: Vec<_> = self
+        let names: Vec<_> = self
             .notes
             .values()
             .map(|note| note.get_json_value().unwrap())
             .collect();
         Ok(names)
+    }
+
+    pub fn get_path(&self) -> Result<&Path> {
+        Ok(self.workspace_path.as_ref())
+    }
+
+    pub fn get_note_by_name(&self, name: &str) -> Result<&Note> {
+        self.notes.get(name).ok_or_else(|| failure::err_msg("no note"))
     }
 }
