@@ -52,27 +52,13 @@ impl Note {
         let path = path.as_ref().join(name);
 
         if path.exists() {
-            unreachable!();
+            failure::err_msg("file already exists");
         }
 
-        let wf = OpenOptions::new()
-            .create(true)
-            .write(true)
-            .read(true)
-            .open(&path)?;
-        let rf = wf.try_clone()?;
+        std::fs::File::create(&path)?;
+        let note = Note::open(path)?;
 
-        let writer = BufWriter::new(wf);
-        let reader = BufReader::new(rf);
-
-        Ok(Note {
-            path,
-            name: String::from(name),
-            content: String::from(""),
-            writer,
-            reader,
-            tags: BTreeSet::new(),
-        })
+        Ok(note)
     }
 
     pub fn get_name(&self) -> &str {
