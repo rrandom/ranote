@@ -1,7 +1,7 @@
 use crate::error::Result;
 use std::collections::BTreeSet;
 use std::fs::{File, OpenOptions};
-use std::io::{BufWriter, Read, Seek, SeekFrom, Write};
+use std::io::{BufWriter, Read, Seek, SeekFrom, Write, BufReader};
 use std::path::{Path, PathBuf};
 
 #[derive(Serialize, Deserialize)]
@@ -15,6 +15,7 @@ pub struct Note {
     name: String,
     content: String,
     writer: BufWriter<File>,
+    reader: BufReader<File>,
     tags: BTreeSet<String>,
 }
 
@@ -26,9 +27,11 @@ impl Note {
             unreachable!();
         }
 
-        let f = OpenOptions::new().write(true).read(true).open(&path)?;
+        let wf = OpenOptions::new().write(true).read(true).open(&path)?;
+        let rf = wf.try_clone()?;
 
-        let writer = BufWriter::new(f);
+        let writer = BufWriter::new(wf);
+        let reader = BufReader::new(rf);
         let name = path.file_name().unwrap().to_os_string();
 
         let mut note = Note {
@@ -36,6 +39,7 @@ impl Note {
             name: name.into_string().unwrap(),
             content: String::from(""),
             writer,
+            reader,
             tags: BTreeSet::new(),
         };
 
@@ -51,19 +55,22 @@ impl Note {
             unreachable!();
         }
 
-        let f = OpenOptions::new()
+        let wf = OpenOptions::new()
             .create(true)
             .write(true)
             .read(true)
             .open(&path)?;
+        let rf = wf.try_clone()?;
 
-        let writer = BufWriter::new(f);
+        let writer = BufWriter::new(wf);
+        let reader = BufReader::new(rf);
 
         Ok(Note {
             path,
             name: String::from(name),
             content: String::from(""),
             writer,
+            reader,
             tags: BTreeSet::new(),
         })
     }
@@ -92,10 +99,9 @@ impl Note {
     }
 
     pub fn read(&mut self) -> Result<()> {
-        let mut f = File::open(self.path.as_path())?;
         let mut content = String::from("");
-
-        f.read_to_string(&mut content)?;
+        self.reader.seek(SeekFrom::Start(0))?;
+        self.reader.read_to_string(&mut content)?;
         self.content = content;
 
         Ok(())
