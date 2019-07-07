@@ -37,6 +37,10 @@ export default class App extends Vue {
     window.listDir = (notes: Note[]) => {
       console.log('notes', notes);
       store.commit('setNotes', notes);
+
+      if (notes.length > 0) {
+        this.onClickNote(notes[0]);
+      }
     };
     window.initCb = window.listDir;
     console.log('App mounted');
