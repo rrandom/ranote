@@ -57,4 +57,12 @@ export default class RFC {
       },
     });
   }
+
+  public static newNote() {
+    console.log('newNote');
+    this.invoke({
+      cmd: 'newNote',
+      cb: 'newNoteCb',
+    });
+  }
 }

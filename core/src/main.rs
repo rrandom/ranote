@@ -47,6 +47,12 @@ fn main() -> Result<()> {
                     wv.eval(&format_callback(&cb, &params.to_string()))?;
                     info!(root_log, "Note Loaded"; "name" => &name);
                 }
+                NewNote{ cb } => {
+                    let noteName = wkspace.new_note().expect("create new note");
+                    let params = json!({ "name": noteName});
+                    wv.eval(&format_callback(&cb, &params.to_string()))?;
+                    info!(root_log, "Note newed"; "name" => &noteName);
+                }
                 TestClick { cb } => {
                     println!("TestClick");
                     wv.eval(&format!("{}()", cb))?;

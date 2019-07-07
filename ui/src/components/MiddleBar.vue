@@ -1,5 +1,8 @@
 <template>
   <div class="middle-bar">
+    <div>
+      <div@click="onNewNote">+</div>
+    </div>
     <div
       v-for="(note, k) in notes"
       @click="onClickNote(note)"
@@ -21,6 +24,10 @@ export default class MiddleBar extends Vue {
 
   @Emit()
   public onClickNote(name: Note) {
+  }
+
+  @Emit()
+  public onNewNote() {
   }
 }
 </script>

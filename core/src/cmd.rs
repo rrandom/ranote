@@ -12,6 +12,9 @@ pub enum Cmd {
         name: String,
         cb: String,
     },
+    NewNote {
+        cb: String,
+    },
     ListDirs {
         cb: String,
         home: bool,

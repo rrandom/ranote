@@ -49,4 +49,13 @@ impl Wkspace {
             .get_mut(name)
             .ok_or_else(|| failure::err_msg("no note"))
     }
+
+    pub fn new_note(&mut self) -> Result<String> {
+        let name = uuid::Uuid::new_v4().to_string();
+        let note = Note::new(self.get_path()?, &name)?;
+
+        self.notes.insert(name.clone(), note);
+
+        Ok(name)
+    }
 }

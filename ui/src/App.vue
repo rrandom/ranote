@@ -1,7 +1,11 @@
 <template>
   <div id="app">
     <LeftBar/>
-    <MiddleBar :notes="notes" @on-click-note="onClickNote" />
+    <MiddleBar
+      :notes="notes"
+      @on-click-note="onClickNote"
+      @on-new-note="onNewNote"
+    />
     <div class="editor-panel">
       <div class="menu-bar">
         <router-link to="/">Editor</router-link> |
@@ -29,7 +33,7 @@ import store from './store';
 })
 export default class App extends Vue {
 
-  public mounted() {
+  public getNotesAndLoad() {
     window.listDir = (notes: Note[]) => {
       console.log('notes', notes);
       store.commit('setNotes', notes);
@@ -37,6 +41,10 @@ export default class App extends Vue {
     window.initCb = window.listDir;
     console.log('App mounted');
     RFC.init();
+  }
+
+  public mounted() {
+    this.getNotesAndLoad();
   }
 
   get notes() {
@@ -49,6 +57,15 @@ export default class App extends Vue {
       store.commit('setCurrentNote', note);
     };
     RFC.loadNote(note);
+  }
+
+  public onNewNote() {
+    window.newNoteCb = (note: Note) => {
+      this.getNotesAndLoad();
+      console.log('newnote', note);
+      this.onClickNote(note);
+    };
+    RFC.newNote();
   }
 }
 </script>
