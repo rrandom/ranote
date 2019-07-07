@@ -28,11 +28,11 @@ fn main() -> Result<()> {
             use utils::format_callback;
 
             match serde_json::from_str(arg).expect("Could not get command") {
-                Init => {
+                Init { cb } => {
                     info!(root_log, "ui inited");
                     let notes = wkspace.get_notes_names().expect("could not get names");
                     let notes = serde_json::to_string(&notes).unwrap();
-                    wv.eval(&format_callback("listDir", &notes.to_string()))?;
+                    wv.eval(&format_callback(&cb, &notes.to_string()))?;
                 }
                 SaveNote { name, content } => {
                     let note = wkspace.get_note_by_name(&name).expect("could not get note");

@@ -33,6 +33,7 @@ export default class RFC {
   public static init() {
     this.invoke({
       cmd: 'init',
+      cb: 'initCb',
     });
   }
 

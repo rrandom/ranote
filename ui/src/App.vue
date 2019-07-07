@@ -34,6 +34,7 @@ export default class App extends Vue {
       console.log('notes', notes);
       store.commit('setNotes', notes);
     };
+    window.initCb = window.listDir;
     console.log('App mounted');
     RFC.init();
   }

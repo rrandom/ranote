@@ -1,7 +1,9 @@
 #[derive(Deserialize)]
 #[serde(tag = "cmd", rename_all = "camelCase")]
 pub enum Cmd {
-    Init,
+    Init {
+        cb: String,
+    },
     SaveNote {
         name: String,
         content: String,
