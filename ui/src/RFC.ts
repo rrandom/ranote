@@ -37,11 +37,11 @@ export default class RFC {
     });
   }
 
-  public static loadNote(note: Note) {
+  public static loadNote(noteName: string) {
     this.invoke({
       cmd: 'loadNote',
       params: {
-        name: note.name,
+        name: noteName,
       },
       cb: 'loadNoteCb',
     });

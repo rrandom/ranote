@@ -25,14 +25,7 @@ export default class Editor extends Vue {
 
   public beforeRouteLeave(to: Route, from: Route, next: any) {
     const value = this.cm!.getDoc().getValue();
-
     const currentNote = store.state.currentNote!;
-
-    store.commit('setCurrentNote', {
-      ...currentNote,
-      content: value,
-    });
-
     RFC.saveNote(currentNote, value);
 
     next();
@@ -46,14 +39,28 @@ export default class Editor extends Vue {
     RFC.testClick();
   }
 
-  @Watch('$store.state.currentNote')
-  public onNoteChanged(note: Note) {
-    this.cm!.setValue(note.content as string);
+  public loadNote(noteName: string) {
+    window.loadNoteCb = (note: Note) => {
+      store.commit('setCurrentNote', note);
+      this.cm!.setValue(note.content as string);
+    };
+    RFC.loadNote(noteName);
+  }
+
+  @Watch('$route.query')
+  public onChange(newV: any, oldV: any) {
+    if (store.state.currentNote && store.state.currentNote.name == oldV.name) {
+      console.log('saving');
+      const value = this.cm!.getDoc().getValue();
+      RFC.saveNote(store.state.currentNote, value);
+    }
+
+    this.loadNote(newV.name);
   }
 
   public mounted() {
     const cm = CodeMirror(this.$el as HTMLElement, {
-      value: 'function myScript(){return 100;}\n',
+      value: '',
       mode:  'markdown',
       theme: 'midnight',
       lineNumbers: true,
@@ -61,6 +68,10 @@ export default class Editor extends Vue {
     });
     this.cm = cm;
     cm.setSize(null, '100%');
+
+    if (this.$route.query.name) {
+      this.loadNote(this.$route.query.name as string);
+    }
   }
 }
 </script>

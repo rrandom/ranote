@@ -8,8 +8,8 @@
     />
     <div class="editor-panel">
       <div class="menu-bar">
-        <router-link to="/">Editor</router-link> |
-        <router-link to="/preview">Preview</router-link>
+        <a @click="toEditor">Editor</a> |
+        <a @click="toPreview">Preview</a>
       </div>
       <keep-alive>
         <router-view/>
@@ -56,11 +56,7 @@ export default class App extends Vue {
   }
 
   public onClickNote(note: Note) {
-    window.loadNoteCb = (note: Note) => {
-      console.log(note);
-      store.commit('setCurrentNote', note);
-    };
-    RFC.loadNote(note);
+    this.$router.push({ name: this.$route.name, query: { name: note.name } });
   }
 
   public onNewNote() {
@@ -70,6 +66,14 @@ export default class App extends Vue {
       this.onClickNote(note);
     };
     RFC.newNote();
+  }
+
+  public toEditor() {
+    this.$router.push({ name: 'editor', query: this.$route.query });
+  }
+
+  public toPreview() {
+    this.$router.push({ name: 'preview', query: this.$route.query });
   }
 }
 </script>
