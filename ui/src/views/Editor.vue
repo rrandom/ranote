@@ -49,7 +49,7 @@ export default class Editor extends Vue {
 
   @Watch('$route.query')
   public onChange(newV: any, oldV: any) {
-    if (store.state.currentNote && store.state.currentNote.name == oldV.name) {
+    if (store.state.currentNote && store.state.currentNote.name === oldV.name) {
       console.log('saving');
       const value = this.cm!.getDoc().getValue();
       RFC.saveNote(store.state.currentNote, value);
