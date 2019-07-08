@@ -48,7 +48,6 @@ export default class RFC {
   }
 
   public static saveNote(note: Note, content: string) {
-    console.log('note', note);
     this.invoke({
       cmd: 'saveNote',
       params: {

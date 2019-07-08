@@ -62,7 +62,6 @@ export default class App extends Vue {
   public onNewNote() {
     window.newNoteCb = (note: Note) => {
       this.getNotesAndLoad();
-      console.log('newnote', note);
       this.onClickNote(note);
     };
     RFC.newNote();
