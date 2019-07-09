@@ -52,7 +52,9 @@ export default class Preview extends Vue {
 <style lang="scss">
 .preview-container {
   padding-left: 10px;
-  overflow: scroll;
+  overflow-y: scroll;
+  overflow-x: hidden;
   max-height: 100vh;
+  height: 100%;
 }
 </style>

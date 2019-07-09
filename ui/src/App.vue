@@ -8,8 +8,7 @@
     />
     <div class="editor-panel">
       <div class="menu-bar">
-        <a @click="toEditor">Editor</a> |
-        <a @click="toPreview">Preview</a>
+        <a @click="toogleState" :class="{active: routerName == 'editor' }">E</a>
       </div>
       <keep-alive>
         <router-view/>
@@ -55,6 +54,10 @@ export default class App extends Vue {
     return store.state.notes;
   }
 
+  get routerName() {
+    return this.$route.name;
+  }
+
   public onClickNote(note: Note) {
     this.$router.push({ name: this.$route.name, query: { name: note.name } });
   }
@@ -67,6 +70,14 @@ export default class App extends Vue {
     RFC.newNote();
   }
 
+  public toogleState() {
+    if (this.routerName === 'editor') {
+      this.toPreview();
+    } else {
+      this.toEditor();
+    }
+  }
+
   public toEditor() {
     this.$router.push({ name: 'editor', query: this.$route.query });
   }
@@ -77,6 +88,10 @@ export default class App extends Vue {
 }
 </script>
 <style lang="scss">
+html, body {
+  margin: 0;
+}
+
 #app {
   font-family: 'Avenir', Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
@@ -85,26 +100,55 @@ export default class App extends Vue {
 
   display: flex;
   flex-direction: row;
-  height: 95vh;
+  height: 100vh;
   box-sizing: border-box;
   overflow: hidden;
 }
 
 .menu-bar {
-  padding: 5px;
-  height: 30px;
-  font-size: 146x;
+  background-color: #f5f5f5;
+  border-color: #d6d6d6;
+  color: #505050;
+  text-align: center;
+  height: 38px;
+  border-bottom-width: 1px;
+  border-bottom-style: solid;
+  display: flex;
+  justify-content: left;
+  align-items: center;
+  padding-left: 10px;
+
   a {
-    font-weight: bold;
-    color: #2c3e50;
-    &.router-link-exact-active {
-      color: burlywood;
+    box-sizing: border-box;
+    overflow-wrap: normal;
+    word-wrap: normal;
+    word-break: normal;
+    hyphens: manual;
+    font-weight: 500;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    line-height: 1.5;
+    border-radius: .375em;
+    min-width: 2em;
+    border-width: 1px;
+    border-style: solid;
+    background-color: #fff;
+    color: #1f1f1f;
+    border-color: #dadada;
+    padding: 2px 5px;
+    margin-right: 8px;
+    cursor: pointer;
+
+    &.active {
+      color: #ef6c00;
     }
   }
 }
 
 .editor-panel {
   flex: 1 1;
-  height: calc(95vh - 30px);
+  height: calc(100vh - 30px);
 }
 </style>
