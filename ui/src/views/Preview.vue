@@ -10,8 +10,25 @@ import { Route } from 'vue-router';
 import MarkdownIt from 'markdown-it';
 import { Note } from '../types';
 
+import Typography from 'typography';
+import theme from 'typography-theme-grand-view';
 import RFC from '../RFC';
 import store from '../store';
+
+theme.overrideThemeStyles = () => ({
+  pre: {
+    background: '#f8f8f8',
+    padding: '3px',
+    border: '1px solid #ccc',
+    borderRadius: '4px',
+  },
+  code: {
+  },
+});
+
+const typography = new Typography(theme);
+
+typography.injectStyles();
 
 @Component({
 })
