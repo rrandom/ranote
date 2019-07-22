@@ -71,6 +71,7 @@ export default class MiddleBar extends Vue {
       color: #1f1f1f;
       border-color: #dadada;
       padding: 2px 5px;
+      cursor: pointer;
     }
   }
 
