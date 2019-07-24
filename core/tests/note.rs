@@ -15,5 +15,8 @@ fn create_new_note() -> Result<()> {
 
     assert_eq!(note.get_content().unwrap().as_str(), "test content");
 
+    note.write("write again".to_owned())?;
+
+    assert_eq!(note.get_content().unwrap().as_str(), "write again");
     Ok(())
 }
