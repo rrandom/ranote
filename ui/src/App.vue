@@ -118,6 +118,7 @@ html, body {
   justify-content: left;
   align-items: center;
   padding-left: 10px;
+  user-select: none;
 
   .btn {
 

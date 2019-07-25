@@ -38,6 +38,7 @@ export default class MiddleBar extends Vue {
 .middle-bar {
   border-right: #dedede solid 1px;
   width: 200px;
+  user-select: none;
 
   .tool-bar {
     background-color: #f5f5f5;
