@@ -4,7 +4,7 @@ use winapi::shared::windef::HWND;
 
 use winit::dpi::{LogicalPosition, LogicalSize};
 use winit::platform::windows::WindowExtWindows;
-use winit::window::{Window};
+use winit::window::Window;
 
 pub enum HwndType {
     FillWindow,
@@ -21,7 +21,7 @@ pub fn new_control<F>(
     callback: Option<F>,
 ) -> Result<Control, String>
 where
-    F: FnOnce(Control) + 'static
+    F: FnOnce(Control) + 'static,
 {
     let window_hwnd = window.hwnd() as *mut _;
     let hwnd_type = match hwnd_type {
@@ -35,16 +35,22 @@ where
         .unwrap_or(LogicalPosition { x: 0.0, y: 0.0 })
         .to_physical(dpi_factor)
         .into();
-    let size: (u32, u32) = size.or(Some(window.inner_size())).unwrap_or(LogicalSize {
-        width: 1024.0,
-        height: 768.0,
-    }).to_physical(dpi_factor).into();
-    process.create_control(
-        hwnd_type,
-        // The true size will be sorted out by size(), which will queue the size change until
-        // the control is created.
-        position,
-        (size.0 as i32, size.1 as i32),
-        callback,
-    ).map_err(|err| err.to_string())
+    let size: (u32, u32) = size
+        .or(Some(window.inner_size()))
+        .unwrap_or(LogicalSize {
+            width: 1024.0,
+            height: 768.0,
+        })
+        .to_physical(dpi_factor)
+        .into();
+    process
+        .create_control(
+            hwnd_type,
+            // The true size will be sorted out by size(), which will queue the size change until
+            // the control is created.
+            position,
+            (size.0 as i32, size.1 as i32),
+            callback,
+        )
+        .map_err(|err| err.to_string())
 }
