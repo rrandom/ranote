@@ -1,7 +1,7 @@
 <template>
   <div class="middle-bar">
     <div class="tool-bar">
-      <div @click="onNewNote" class="tool-bar-btn">+</div>
+      <div @click="onNewNote" class="tool-bar-btn btn">+</div>
     </div>
     <div class="notes">
       <div
@@ -52,26 +52,6 @@ export default class MiddleBar extends Vue {
     align-items: center;
 
     &-btn {
-      box-sizing: border-box;
-      overflow-wrap: normal;
-      word-wrap: normal;
-      word-break: normal;
-      hyphens: manual;
-      font-weight: 500;
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      text-align: center;
-      line-height: 1.5;
-      border-radius: .375em;
-      min-width: 2.875em;
-      border-width: 1px;
-      border-style: solid;
-      background-color: #fff;
-      color: #1f1f1f;
-      border-color: #dadada;
-      padding: 2px 5px;
-      cursor: pointer;
     }
   }
 

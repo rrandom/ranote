@@ -8,7 +8,7 @@
     />
     <div class="editor-panel">
       <div class="menu-bar">
-        <a @click="toogleState" :class="{active: routerName == 'editor' }">E</a>
+        <a @click="toogleState" :class="{active: routerName == 'editor', btn: true}">E</a>
       </div>
       <keep-alive>
         <router-view/>
@@ -23,6 +23,7 @@ import LeftBar from '@/components/LeftBar.vue';
 import MiddleBar from '@/components/MiddleBar.vue';
 import { Note } from './types';
 import store from './store';
+import './assets/main.scss';
 
 @Component({
   components: {
@@ -118,28 +119,7 @@ html, body {
   align-items: center;
   padding-left: 10px;
 
-  a {
-    box-sizing: border-box;
-    overflow-wrap: normal;
-    word-wrap: normal;
-    word-break: normal;
-    hyphens: manual;
-    font-weight: 500;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    text-align: center;
-    line-height: 1.5;
-    border-radius: .375em;
-    min-width: 2em;
-    border-width: 1px;
-    border-style: solid;
-    background-color: #fff;
-    color: #1f1f1f;
-    border-color: #dadada;
-    padding: 2px 5px;
-    margin-right: 8px;
-    cursor: pointer;
+  .btn {
 
     &.active {
       color: #ef6c00;

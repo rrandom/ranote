@@ -18,6 +18,7 @@ export default {
   color: #fff;
   min-width: 150px;
   text-align: center;
+  user-select: none;
 
   .item {
     text-overflow: ellipsis;
