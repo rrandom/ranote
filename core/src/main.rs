@@ -45,7 +45,7 @@ fn main() -> Result<()> {
                     note.read().expect("refresh");
                     let content = note.get_content().expect("no content");
                     let params =
-                        json!({ "name": note.id(), "path": note.get_path(), "content": content });
+                        json!({ "id": note.id(), "name": note.name(), "path": note.get_path(), "content": content });
                     wv.eval(&format_callback(&cb, &params.to_string()))?;
                     info!(root_log, "Note Loaded"; "name" => &id);
                 }

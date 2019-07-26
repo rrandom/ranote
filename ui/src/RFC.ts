@@ -33,7 +33,7 @@ export default class RFC {
       cmd: 'saveNote',
       params: {
         id: note.id,
-        newContent,
+        content: newContent,
       },
     });
   }

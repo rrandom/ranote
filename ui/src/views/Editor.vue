@@ -51,12 +51,14 @@ export default class Editor extends Vue {
 
   @Watch('$route.query')
   public onChange(newV: any, oldV: any) {
-    if (store.state.activeNote && store.state.activeNote.name === oldV.name) {
-      const value = this.cm!.getDoc().getValue();
-      RFC.saveNote(store.state.activeNote, value);
-    }
+    if (newV.id !== oldV.id) {
+      if (store.state.activeNote && store.state.activeNote.id === oldV.id) {
+        const value = this.cm!.getDoc().getValue();
+        RFC.saveNote(store.state.activeNote, value);
+      }
 
-    this.loadNote(newV.id);
+      this.loadNote(newV.id);
+    }
   }
 
   public mounted() {

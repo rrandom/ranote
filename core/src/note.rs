@@ -19,7 +19,7 @@ pub struct Note {
     content: String,
     writer: BufWriter<File>,
     reader: BufReader<File>,
-    meta: NoteMetaData,
+    pub meta: NoteMetaData,
     tags: BTreeSet<String>,
 }
 
@@ -71,7 +71,7 @@ impl Note {
     }
 
     pub fn name(&self) -> &str {
-        unimplemented!();
+        self.meta.title()
     }
 
     pub fn get_path(&self) -> String {
