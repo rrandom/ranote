@@ -8,15 +8,19 @@ fn create_new_note() -> Result<()> {
 
     drop(note);
 
-    let mut note = Note::open(temp_dir.path().join("tmp"))?;
-    assert_eq!(note.get_content().unwrap(), "");
+    let tmp_file_path = temp_dir.path().join("tmp");
+    let mut note = Note::open(&tmp_file_path)?;
+    assert_eq!(note.content(), "");
 
     note.write("test content".to_owned())?;
 
-    assert_eq!(note.get_content().unwrap().as_str(), "test content");
+    let fs_content = std::fs::read_to_string(&tmp_file_path).unwrap();
 
-    note.write("write again".to_owned())?;
+    assert_eq!(fs_content, "test content");
+    assert_eq!(note.content(), "test content");
 
-    assert_eq!(note.get_content().unwrap().as_str(), "write again");
+    note.write("abcd".to_owned())?;
+
+    assert_eq!(note.content(), "abcd");
     Ok(())
 }

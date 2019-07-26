@@ -86,8 +86,8 @@ impl Note {
         })
     }
 
-    pub fn get_content(&self) -> Result<String> {
-        Ok(self.content.clone())
+    pub fn content(&self) -> &str {
+        self.content.as_str()
     }
 
     pub fn refresh(&mut self) -> Result<()> {
@@ -110,7 +110,11 @@ impl Note {
         self.writer.seek(SeekFrom::Start(0))?;
         self.writer.write_all(&content.as_bytes())?;
         self.writer.flush()?;
-        self.content = content;
+        self.content = content.clone();
+        let path = &self.path;
+        std::fs::write(path, &content)?;
+        let fs_content = std::fs::read_to_string(path);
+        // dbg!(&content, fs_content);
         Ok(())
     }
 

@@ -27,6 +27,7 @@ export default class Editor extends Vue {
     const value = this.cm!.getDoc().getValue();
     if (store.state.activeNote) {
       const currentNote = store.state.activeNote;
+      store.commit('setActiveNote', {...currentNote, content: value});
       RFC.saveNote(currentNote, value);
     }
 

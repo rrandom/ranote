@@ -37,23 +37,23 @@ fn main() -> Result<()> {
                 SaveNote { id, content } => {
                     let note = wkspace.get_note_by_name(&id).expect("could not get note");
                     note.write(content).expect("can not write");
-                    info!(root_log, "Note Saved"; "name" => &id);
+                    info!(root_log, "Note Saved"; "name" => &id, "content" => note.content());
                 }
                 LoadNote { id, cb } => {
                     let note = wkspace.get_note_by_name(&id).expect("could not get note");
                     note.read().expect("refresh");
-                    let content = note.get_content().expect("no content");
+                    let content = note.content();
                     let params =
                         json!({ "id": note.id(), "name": note.name(), "path": note.get_path(), "content": content });
                     wv.eval(&format_callback(&cb, &params.to_string()))?;
-                    info!(root_log, "Note Loaded"; "name" => &id);
+                    info!(root_log, "Note Loaded"; "name" => &id, "content" => content);
                 }
                 Debug { name, msg } => {
                     info!(root_log, "[WEB]Debug"; "name" => &name, "msg" => &msg);
                 }
                 NewNote { cb } => {
                     let new_note = wkspace.new_note().expect("create new note");
-                    let params = json!({ "name": new_note.name(), "id": new_note.id(), "path": new_note.get_path(), "content": new_note.get_content().unwrap() });
+                    let params = json!({ "name": new_note.name(), "id": new_note.id(), "path": new_note.get_path(), "content": new_note.content() });
                     wv.eval(&format_callback(&cb, &params.to_string()))?;
                     info!(root_log, "Note newed"; "name" => &new_note.id());
                 }
