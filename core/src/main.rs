@@ -24,13 +24,14 @@ fn main() -> Result<()> {
         .debug(true)
         .user_data(())
         .invoke_handler(|wv, arg| {
-            use Cmd::*;
             use utils::format_callback;
+            use Cmd::*;
 
             match serde_json::from_str(arg).expect("Could not get command") {
                 Init { cb } => {
                     info!(root_log, "ui inited");
                     let notes = wkspace.get_notes_names().expect("could not get names");
+                    dbg!(&notes);
                     let notes = serde_json::to_string(&notes).unwrap();
                     wv.eval(&format_callback(&cb, &notes.to_string()))?;
                 }
@@ -43,13 +44,17 @@ fn main() -> Result<()> {
                     let note = wkspace.get_note_by_name(&name).expect("could not get note");
                     note.read().expect("refresh");
                     let content = note.get_content().expect("no content");
-                    let params = json!({ "name": note.name(), "path": note.get_path(), "content": content });
+                    let params =
+                        json!({ "name": note.id(), "path": note.get_path(), "content": content });
                     wv.eval(&format_callback(&cb, &params.to_string()))?;
                     info!(root_log, "Note Loaded"; "name" => &name);
                 }
-                NewNote{ cb } => {
+                Debug { msg } => {
+                    println!("{}", msg);
+                }
+                NewNote { cb } => {
                     let note_name = wkspace.new_note().expect("create new note");
-                    let params = json!({ "name": note_name});
+                    let params = json!({ "name": note_name });
                     wv.eval(&format_callback(&cb, &params.to_string()))?;
                     info!(root_log, "Note newed"; "name" => &note_name);
                 }

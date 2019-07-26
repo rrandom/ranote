@@ -51,7 +51,7 @@ export default class Preview extends Vue {
 
   @Watch('$route.query')
   public onChange(newV: any) {
-    this.loadNote(newV.name);
+    this.loadNote(newV.id);
   }
 
   public mounted() {
@@ -60,7 +60,7 @@ export default class Preview extends Vue {
       this.updateContent(store.state.currentNote.content!);
     } else {
       if (this.$route.query) {
-        this.loadNote(this.$route.query.name as string);
+        this.loadNote(this.$route.query.id as string);
       }
     }
   }

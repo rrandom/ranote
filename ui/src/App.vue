@@ -60,7 +60,8 @@ export default class App extends Vue {
   }
 
   public onClickNote(note: Note) {
-    this.$router.push({ name: this.$route.name, query: { name: note.name } });
+    RFC.debug(note);
+    this.$router.push({ name: this.$route.name, query: { id: note.id } });
   }
 
   public onNewNote() {

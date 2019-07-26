@@ -13,6 +13,7 @@ interface Command {
 interface Note {
   name: string;
   path: string;
+  id: string;
 }
 
 export default class RFC {
@@ -62,6 +63,19 @@ export default class RFC {
     this.invoke({
       cmd: 'newNote',
       cb: 'newNoteCb',
+    });
+  }
+
+  public static debug(info: any) {
+    const msg = JSON.stringify(info);
+    window.debugCb = () => ({});
+
+    this.invoke({
+      cmd: 'debug',
+      params: {
+        msg,
+      },
+      cb: 'debugCb',
     });
   }
 }

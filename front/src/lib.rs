@@ -15,12 +15,16 @@ lazy_static! {
         Regex::new(r"^[[:space:]]*\+\+\+\r?\n((?s).*?(?-s))\+\+\+\r?\n?((?s).*(?-s))$").unwrap();
 }
 
-fn split_content(file_path: &Path, content: &str) -> Result<(String, String)> {
+fn split_content(
+    file_path: &Path,
+    content: &str,
+) -> std::result::Result<(String, String), failure::Error> {
     if !PAGE_RE.is_match(content) {
         println!(
             "Couldn't find front matter in `{}`. Did you forget to add `+++`?",
             file_path.to_string_lossy()
         );
+        return Err(failure::err_msg("cant parse"));
     }
 
     let caps = PAGE_RE.captures(content).unwrap();
@@ -77,7 +81,6 @@ mod tests {
         let res = NoteMetaData::parse(content);
         assert!(res.is_err());
     }
-
 
     fn test_process_note() {
         let content = r#"

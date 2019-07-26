@@ -1,22 +1,25 @@
 use crate::error::Result;
+use front::{get_note_content, NoteMetaData};
 use std::collections::BTreeSet;
 use std::fs::{File, OpenOptions};
 use std::io::{BufReader, BufWriter, Read, Seek, SeekFrom, Write};
 use std::path::{Path, PathBuf};
 
-#[derive(Serialize, Deserialize)]
+#[derive(Serialize, Deserialize, Debug)]
 pub struct NoteItem {
     path: String,
     name: String,
     id: String,
 }
 
+#[derive(Debug)]
 pub struct Note {
     path: PathBuf,
     id: String,
     content: String,
     writer: BufWriter<File>,
     reader: BufReader<File>,
+    meta: NoteMetaData,
     tags: BTreeSet<String>,
 }
 
@@ -41,6 +44,7 @@ impl Note {
             content: String::from(""),
             writer,
             reader,
+            meta: NoteMetaData::default(),
             tags: BTreeSet::new(),
         };
 
@@ -94,6 +98,9 @@ impl Note {
         let mut content = String::from("");
         self.reader.seek(SeekFrom::Start(0))?;
         self.reader.read_to_string(&mut content)?;
+        let (meta, content) = get_note_content(&self.path, &content)
+            .unwrap_or_else(|_| (NoteMetaData::default(), String::new()));
+        self.meta = meta;
         self.content = content;
 
         Ok(())

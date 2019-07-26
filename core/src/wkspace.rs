@@ -20,9 +20,11 @@ impl Wkspace {
                 let note_path = p.unwrap().path();
                 let note = Note::open(note_path).expect("could not open note");
 
-                (note.name().to_owned(), note)
+                (note.id().to_owned(), note)
             })
             .collect();
+
+        dbg!(&notes);
 
         Ok(Wkspace {
             workspace_path: wk_path,
@@ -45,6 +47,7 @@ impl Wkspace {
     }
 
     pub fn get_note_by_name(&mut self, name: &str) -> Result<&mut Note> {
+        dbg!(name);
         self.notes
             .get_mut(name)
             .ok_or_else(|| failure::err_msg("no note"))

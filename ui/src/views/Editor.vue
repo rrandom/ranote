@@ -54,7 +54,8 @@ export default class Editor extends Vue {
       RFC.saveNote(store.state.currentNote, value);
     }
 
-    this.loadNote(newV.name);
+    RFC.debug({o: 'onChange', i: newV});
+    this.loadNote(newV.id);
   }
 
   public mounted() {
@@ -68,8 +69,10 @@ export default class Editor extends Vue {
     this.cm = cm;
     cm.setSize(null, '100%');
 
-    if (this.$route.query.name) {
-      this.loadNote(this.$route.query.name as string);
+    RFC.debug(this.$route.query);
+
+    if (this.$route.query.id) {
+      this.loadNote(this.$route.query.id as string);
     }
   }
 }

@@ -20,6 +20,9 @@ pub enum Cmd {
         home: bool,
         path: String,
     },
+    Debug {
+        msg: String,
+    },
     SetHome {
         cb: String,
         path: String,
