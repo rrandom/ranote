@@ -53,7 +53,7 @@ impl NoteMetaData {
         let note_meta: NoteMetaData = toml::from_str(toml_str)?;
         Ok(note_meta)
     }
-    
+
     pub fn title(&self) -> &str {
         self.title.as_str()
     }
