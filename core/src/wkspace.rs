@@ -24,8 +24,6 @@ impl Wkspace {
             })
             .collect();
 
-        dbg!(&notes);
-
         Ok(Wkspace {
             workspace_path: wk_path,
             notes,
@@ -52,12 +50,11 @@ impl Wkspace {
             .ok_or_else(|| failure::err_msg("no note"))
     }
 
-    pub fn new_note(&mut self) -> Result<String> {
+    pub fn new_note(&mut self) -> Result<&mut Note> {
         let name = uuid::Uuid::new_v4().to_string();
         let note = Note::new(self.get_path()?, &name)?;
 
         self.notes.insert(name.clone(), note);
-
-        Ok(name)
+        self.get_note_by_name(&name)
     }
 }

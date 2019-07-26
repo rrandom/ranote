@@ -55,7 +55,7 @@ export default class RFC {
     });
   }
 
-  public static debug(name: string, info: any) {
+  public static dbg(name: string, info: any) {
     const msg = JSON.stringify({ info });
     window.debugCb = () => ({});
 

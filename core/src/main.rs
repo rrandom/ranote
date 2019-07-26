@@ -31,7 +31,6 @@ fn main() -> Result<()> {
                 Init { cb } => {
                     info!(root_log, "ui inited");
                     let notes = wkspace.get_notes_names().expect("could not get names");
-                    // dbg!(&notes);
                     let notes = serde_json::to_string(&notes).unwrap();
                     wv.eval(&format_callback(&cb, &notes.to_string()))?;
                 }
@@ -50,13 +49,13 @@ fn main() -> Result<()> {
                     info!(root_log, "Note Loaded"; "name" => &id);
                 }
                 Debug { name, msg } => {
-                    info!(root_log, "[web]Debug"; "name" => &name, "msg" => &msg);
+                    info!(root_log, "[WEB]Debug"; "name" => &name, "msg" => &msg);
                 }
                 NewNote { cb } => {
-                    let note_name = wkspace.new_note().expect("create new note");
-                    let params = json!({ "name": note_name });
+                    let new_note = wkspace.new_note().expect("create new note");
+                    let params = json!({ "name": new_note.name(), "id": new_note.id(), "path": new_note.get_path(), "content": new_note.get_content().unwrap() });
                     wv.eval(&format_callback(&cb, &params.to_string()))?;
-                    info!(root_log, "Note newed"; "name" => &note_name);
+                    info!(root_log, "Note newed"; "name" => &new_note.id());
                 }
                 TestClick { cb } => {
                     println!("TestClick");

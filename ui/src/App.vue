@@ -60,7 +60,6 @@ export default class App extends Vue {
   }
 
   public onClickNote(note: Note) {
-    RFC.debug('onClickNote', note);
     this.$router.push({ name: this.$route.name, query: { id: note.id } });
   }
 

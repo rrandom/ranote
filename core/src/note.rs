@@ -99,7 +99,7 @@ impl Note {
         self.reader.seek(SeekFrom::Start(0))?;
         self.reader.read_to_string(&mut content)?;
         let (meta, content) = get_note_content(&self.path, &content)
-            .unwrap_or_else(|_| (NoteMetaData::default(), String::new()));
+            .unwrap_or_else(|_| (NoteMetaData::default(), content));
         self.meta = meta;
         self.content = content;
 
@@ -112,6 +112,10 @@ impl Note {
         self.writer.flush()?;
         self.content = content;
         Ok(())
+    }
+
+    pub fn save(&mut self) -> Result<()> {
+        unimplemented!();
     }
 
     pub fn add_tag() -> Result<()> {

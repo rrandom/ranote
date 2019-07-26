@@ -44,7 +44,7 @@ export default class Editor extends Vue {
   public loadNote(noteName: string) {
     window.loadNoteCb = (note: ActiveNote) => {
       store.commit('setActiveNote', note);
-      this.cm!.setValue(note.content as string);
+      this.cm!.setValue(note.content);
     };
     RFC.loadNote(noteName);
   }
