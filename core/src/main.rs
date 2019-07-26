@@ -43,7 +43,7 @@ fn main() -> Result<()> {
                     let note = wkspace.get_note_by_name(&name).expect("could not get note");
                     note.read().expect("refresh");
                     let content = note.get_content().expect("no content");
-                    let params = json!({ "name": note.get_name(), "path": note.get_path(), "content": content });
+                    let params = json!({ "name": note.name(), "path": note.get_path(), "content": content });
                     wv.eval(&format_callback(&cb, &params.to_string()))?;
                     info!(root_log, "Note Loaded"; "name" => &name);
                 }

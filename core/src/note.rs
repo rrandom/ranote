@@ -8,11 +8,12 @@ use std::path::{Path, PathBuf};
 pub struct NoteItem {
     path: String,
     name: String,
+    id: String,
 }
 
 pub struct Note {
     path: PathBuf,
-    name: String,
+    id: String,
     content: String,
     writer: BufWriter<File>,
     reader: BufReader<File>,
@@ -32,11 +33,11 @@ impl Note {
 
         let writer = BufWriter::new(wf);
         let reader = BufReader::new(rf);
-        let name = path.file_name().unwrap().to_os_string();
+        let id = path.file_name().unwrap().to_os_string();
 
         let mut note = Note {
             path: PathBuf::from(path),
-            name: name.into_string().unwrap(),
+            id: id.into_string().unwrap(),
             content: String::from(""),
             writer,
             reader,
@@ -61,8 +62,12 @@ impl Note {
         Ok(note)
     }
 
-    pub fn get_name(&self) -> &str {
-        self.name.as_str()
+    pub fn id(&self) -> &str {
+        self.id.as_str()
+    }
+
+    pub fn name(&self) -> &str {
+        unimplemented!();
     }
 
     pub fn get_path(&self) -> String {
@@ -72,7 +77,8 @@ impl Note {
     pub fn get_json_value(&self) -> Result<NoteItem> {
         Ok(NoteItem {
             path: self.get_path(),
-            name: self.name.clone(),
+            name: String::new(),
+            id: self.id.clone(),
         })
     }
 

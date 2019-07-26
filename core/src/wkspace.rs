@@ -20,7 +20,7 @@ impl Wkspace {
                 let note_path = p.unwrap().path();
                 let note = Note::open(note_path).expect("could not open note");
 
-                (note.get_name().to_owned(), note)
+                (note.name().to_owned(), note)
             })
             .collect();
 
