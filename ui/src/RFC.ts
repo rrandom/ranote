@@ -4,17 +4,7 @@ declare global {
   }
 }
 
-interface Command {
-  cmd: string;
-  params?: object;
-  cb?: string;
-}
-
-interface Note {
-  name: string;
-  path: string;
-  id: string;
-}
+import { Note, ActiveNote, Command } from './types';
 
 export default class RFC {
   public static invoke(command: Command) {
@@ -38,41 +28,41 @@ export default class RFC {
     });
   }
 
-  public static loadNote(noteName: string) {
+  public static saveNote(note: Note|ActiveNote, newContent: string) {
+    this.invoke({
+      cmd: 'saveNote',
+      params: {
+        id: note.id,
+        newContent,
+      },
+    });
+  }
+
+  public static loadNote(noteId: string) {
     this.invoke({
       cmd: 'loadNote',
       params: {
-        name: noteName,
+        id: noteId,
       },
       cb: 'loadNoteCb',
     });
   }
 
-  public static saveNote(note: Note, content: string) {
-    this.invoke({
-      cmd: 'saveNote',
-      params: {
-        name: note.name,
-        content,
-      },
-    });
-  }
-
   public static newNote() {
-    console.log('newNote');
     this.invoke({
       cmd: 'newNote',
       cb: 'newNoteCb',
     });
   }
 
-  public static debug(info: any) {
-    const msg = JSON.stringify(info);
+  public static debug(name: string, info: any) {
+    const msg = JSON.stringify({ info });
     window.debugCb = () => ({});
 
     this.invoke({
       cmd: 'debug',
       params: {
+        name,
         msg,
       },
       cb: 'debugCb',

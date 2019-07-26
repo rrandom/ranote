@@ -81,7 +81,7 @@ impl Note {
     pub fn get_json_value(&self) -> Result<NoteItem> {
         Ok(NoteItem {
             path: self.get_path(),
-            name: String::new(),
+            name: String::from(self.id()),
             id: self.id.clone(),
         })
     }

@@ -8,7 +8,7 @@
         v-for="(note, k) in notes"
         @click="onClickNote(note)"
         :key="k"
-        :class="['note', $route.query.name == note.name ? 'current' : '']"
+        :class="['note', $route.query.id == note.id ? 'current' : '']"
       >
         {{ note.id }}
       </div>

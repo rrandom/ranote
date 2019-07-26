@@ -31,26 +31,26 @@ fn main() -> Result<()> {
                 Init { cb } => {
                     info!(root_log, "ui inited");
                     let notes = wkspace.get_notes_names().expect("could not get names");
-                    dbg!(&notes);
+                    // dbg!(&notes);
                     let notes = serde_json::to_string(&notes).unwrap();
                     wv.eval(&format_callback(&cb, &notes.to_string()))?;
                 }
-                SaveNote { name, content } => {
-                    let note = wkspace.get_note_by_name(&name).expect("could not get note");
+                SaveNote { id, content } => {
+                    let note = wkspace.get_note_by_name(&id).expect("could not get note");
                     note.write(content).expect("can not write");
-                    info!(root_log, "Note Saved"; "name" => &name);
+                    info!(root_log, "Note Saved"; "name" => &id);
                 }
-                LoadNote { name, cb } => {
-                    let note = wkspace.get_note_by_name(&name).expect("could not get note");
+                LoadNote { id, cb } => {
+                    let note = wkspace.get_note_by_name(&id).expect("could not get note");
                     note.read().expect("refresh");
                     let content = note.get_content().expect("no content");
                     let params =
                         json!({ "name": note.id(), "path": note.get_path(), "content": content });
                     wv.eval(&format_callback(&cb, &params.to_string()))?;
-                    info!(root_log, "Note Loaded"; "name" => &name);
+                    info!(root_log, "Note Loaded"; "name" => &id);
                 }
-                Debug { msg } => {
-                    println!("{}", msg);
+                Debug { name, msg } => {
+                    info!(root_log, "[web]Debug"; "name" => &name, "msg" => &msg);
                 }
                 NewNote { cb } => {
                     let note_name = wkspace.new_note().expect("create new note");

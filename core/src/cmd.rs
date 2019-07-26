@@ -5,22 +5,18 @@ pub enum Cmd {
         cb: String,
     },
     SaveNote {
-        name: String,
+        id: String,
         content: String,
     },
     LoadNote {
-        name: String,
+        id: String,
         cb: String,
     },
     NewNote {
         cb: String,
     },
-    ListDirs {
-        cb: String,
-        home: bool,
-        path: String,
-    },
     Debug {
+        name: String,
         msg: String,
     },
     SetHome {

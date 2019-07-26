@@ -8,7 +8,7 @@
 import { Component, Vue, Watch } from 'vue-property-decorator';
 import { Route } from 'vue-router';
 import MarkdownIt from 'markdown-it';
-import { Note } from '../types';
+import { Note, ActiveNote } from '../types';
 
 import Typography from 'typography';
 import theme from 'typography-theme-grand-view';
@@ -42,9 +42,9 @@ export default class Preview extends Vue {
   }
 
   public loadNote(noteName: string) {
-    window.loadNoteCb = (note: Note) => {
-      store.commit('setCurrentNote', note);
-      this.updateContent(note.content!);
+    window.loadNoteCb = (note: ActiveNote) => {
+      store.commit('setActiveNote', note);
+      this.updateContent(note.content);
     };
     RFC.loadNote(noteName);
   }
@@ -56,8 +56,8 @@ export default class Preview extends Vue {
 
   public mounted() {
     this.md = new MarkdownIt();
-    if (store.state.currentNote) {
-      this.updateContent(store.state.currentNote.content!);
+    if (store.state.activeNote) {
+      this.updateContent(store.state.activeNote.content);
     } else {
       if (this.$route.query) {
         this.loadNote(this.$route.query.id as string);

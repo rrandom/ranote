@@ -47,7 +47,6 @@ impl Wkspace {
     }
 
     pub fn get_note_by_name(&mut self, name: &str) -> Result<&mut Note> {
-        dbg!(name);
         self.notes
             .get_mut(name)
             .ok_or_else(|| failure::err_msg("no note"))

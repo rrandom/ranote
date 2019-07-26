@@ -34,7 +34,7 @@ import './assets/main.scss';
 export default class App extends Vue {
 
   public getNotesAndLoad() {
-    window.listDir = (notes: Note[]) => {
+    window.listNotes = (notes: Note[]) => {
       console.log('notes', notes);
       store.commit('setNotes', notes);
 
@@ -42,7 +42,7 @@ export default class App extends Vue {
         this.onClickNote(notes[0]);
       }
     };
-    window.initCb = window.listDir;
+    window.initCb = window.listNotes;
     console.log('App mounted');
     RFC.init();
   }
@@ -60,7 +60,7 @@ export default class App extends Vue {
   }
 
   public onClickNote(note: Note) {
-    RFC.debug(note);
+    RFC.debug('onClickNote', note);
     this.$router.push({ name: this.$route.name, query: { id: note.id } });
   }
 

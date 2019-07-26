@@ -6,7 +6,7 @@
 <script lang="ts">
 import { Component, Vue, Watch } from 'vue-property-decorator';
 import { Route } from 'vue-router';
-import { Note } from '../types';
+import { Note, ActiveNote } from '../types';
 
 import CodeMirror from 'codemirror';
 import 'codemirror/mode/markdown/markdown';
@@ -25,8 +25,10 @@ export default class Editor extends Vue {
 
   public beforeRouteLeave(to: Route, from: Route, next: any) {
     const value = this.cm!.getDoc().getValue();
-    const currentNote = store.state.currentNote!;
-    RFC.saveNote(currentNote, value);
+    if (store.state.activeNote) {
+      const currentNote = store.state.activeNote;
+      RFC.saveNote(currentNote, value);
+    }
 
     next();
   }
@@ -40,8 +42,8 @@ export default class Editor extends Vue {
   }
 
   public loadNote(noteName: string) {
-    window.loadNoteCb = (note: Note) => {
-      store.commit('setCurrentNote', note);
+    window.loadNoteCb = (note: ActiveNote) => {
+      store.commit('setActiveNote', note);
       this.cm!.setValue(note.content as string);
     };
     RFC.loadNote(noteName);
@@ -49,12 +51,11 @@ export default class Editor extends Vue {
 
   @Watch('$route.query')
   public onChange(newV: any, oldV: any) {
-    if (store.state.currentNote && store.state.currentNote.name === oldV.name) {
+    if (store.state.activeNote && store.state.activeNote.name === oldV.name) {
       const value = this.cm!.getDoc().getValue();
-      RFC.saveNote(store.state.currentNote, value);
+      RFC.saveNote(store.state.activeNote, value);
     }
 
-    RFC.debug({o: 'onChange', i: newV});
     this.loadNote(newV.id);
   }
 
@@ -68,8 +69,6 @@ export default class Editor extends Vue {
     });
     this.cm = cm;
     cm.setSize(null, '100%');
-
-    RFC.debug(this.$route.query);
 
     if (this.$route.query.id) {
       this.loadNote(this.$route.query.id as string);
