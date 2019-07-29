@@ -1,4 +1,4 @@
-use ranote_core::{error::Result, note::Note};
+use core::{error::Result, note::Note};
 use tempfile::TempDir;
 
 #[test]

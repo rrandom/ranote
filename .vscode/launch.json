@@ -8,7 +8,7 @@
       "name": "(windows) Launch",
       "type": "cppvsdbg",
       "request": "launch",
-      "program": "${workspaceFolder}/target/debug/ranote-core.exe",
+      "program": "${workspaceFolder}/target/debug/ranote.exe",
       "args": [],
       "stopAtEntry": false,
       "cwd": "${workspaceFolder}",
