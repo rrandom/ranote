@@ -15,6 +15,7 @@ tempfile = "3.0.8"
 slog = "2.4"
 slog-term = "2.4"
 uuid = { version = "0.7", features = ["serde", "v4"] }
+snafu = "0.4"
 
 [dependencies.front]
 path = "../front"

@@ -1,4 +1,4 @@
-use core::{run, error::Result};
+use core::{error::Result, run};
 
 fn main() -> Result<()> {
     run()

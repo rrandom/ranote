@@ -1,5 +1,6 @@
-use crate::error::Result;
+use crate::error::*;
 use crate::note::{Note, NoteItem};
+use snafu::OptionExt;
 use std::collections::{BTreeMap, BTreeSet};
 use std::fs;
 use std::path::{Path, PathBuf};
@@ -45,9 +46,9 @@ impl Wkspace {
     }
 
     pub fn get_note_by_name(&mut self, name: &str) -> Result<&mut Note> {
-        self.notes
-            .get_mut(name)
-            .ok_or_else(|| failure::err_msg("no note"))
+        self.notes.get_mut(name).context(NoNote {
+            fname: String::from(name),
+        })
     }
 
     pub fn new_note(&mut self) -> Result<&mut Note> {

@@ -1,9 +1,11 @@
-use crate::error::Result;
 use front::{get_note_content, NoteMetaData};
 use std::collections::BTreeSet;
-use std::fs::{File, OpenOptions};
-use std::io::{BufReader, BufWriter, Read, Seek, SeekFrom, Write};
+use std::fs::{self, File, OpenOptions};
+use std::io::{BufReader, BufWriter, Read, Seek, SeekFrom};
 use std::path::{Path, PathBuf};
+
+use crate::error::*;
+use snafu::*;
 
 #[derive(Serialize, Deserialize, Debug)]
 pub struct NoteItem {
@@ -28,11 +30,22 @@ impl Note {
         let path = path.as_ref();
 
         if !path.exists() {
-            unreachable!();
+            return PathNotExist {
+                path: PathBuf::from(path),
+            }
+            .fail();
         }
 
-        let wf = OpenOptions::new().write(true).read(true).open(&path)?;
-        let rf = wf.try_clone()?;
+        let wf = OpenOptions::new()
+            .write(true)
+            .read(true)
+            .open(&path)
+            .context(IoError {
+                path: PathBuf::from(path),
+            })?;
+        let rf = wf.try_clone().context(IoError {
+            path: PathBuf::from(path),
+        })?;
 
         let writer = BufWriter::new(wf);
         let reader = BufReader::new(rf);
@@ -60,7 +73,7 @@ impl Note {
             failure::err_msg("file already exists");
         }
 
-        std::fs::File::create(&path)?;
+        fs::File::create(&path).context(IoError { path: path.clone() })?;
         let note = Note::open(path)?;
 
         Ok(note)
@@ -96,8 +109,12 @@ impl Note {
 
     pub fn read(&mut self) -> Result<()> {
         let mut content = String::from("");
-        self.reader.seek(SeekFrom::Start(0))?;
-        self.reader.read_to_string(&mut content)?;
+        self.reader.seek(SeekFrom::Start(0)).context(IoError {
+            path: self.path.clone(),
+        })?;
+        self.reader.read_to_string(&mut content).context(IoError {
+            path: self.path.clone(),
+        })?;
         let (meta, content) = get_note_content(&self.path, &content)
             .unwrap_or_else(|_| (NoteMetaData::default(), content));
         self.meta = meta;
@@ -107,14 +124,13 @@ impl Note {
     }
 
     pub fn write(&mut self, content: String) -> Result<()> {
-        self.writer.seek(SeekFrom::Start(0))?;
-        self.writer.write_all(&content.as_bytes())?;
-        self.writer.flush()?;
+        // self.writer.seek(SeekFrom::Start(0))?;
+        // self.writer.write_all(&content.as_bytes())?;
+        // self.writer.flush()?;
         self.content = content.clone();
-        let path = &self.path;
-        std::fs::write(path, &content)?;
-        let fs_content = std::fs::read_to_string(path);
-        // dbg!(&content, fs_content);
+        std::fs::write(&self.path, &content).context(IoError {
+            path: self.path.clone(),
+        })?;
         Ok(())
     }
 

@@ -16,16 +16,24 @@ pub enum Error {
         source: std::io::Error,
     },
     #[snafu(display("The user id {} is invalid", user_id))]
-    UserIdInvalid { user_id: i32, backtrace: Backtrace },
+    UserIdInvalid {
+        user_id: i32,
+        backtrace: Backtrace,
+    },
     Any {
-            detail: String,
-        },
+        detail: String,
+    },
 
     #[snafu(display("{}", message))]
-    MiscError { message: String },
+    MiscError {
+        message: String,
+    },
 
     #[snafu(display("IO error {}: {}", path.display(), source))]
-    IoError {path: PathBuf, source: toml::de::Error},
+    IoError {
+        path: PathBuf,
+        source: toml::de::Error,
+    },
 }
 
 pub type Result<T, E = Error> = std::result::Result<T, E>;

@@ -9,8 +9,8 @@ use std::path::Path;
 
 mod error;
 
-use snafu::*;
 use error::*;
+use snafu::*;
 
 // type Result<T> = result::Result<T, Box<dyn Error>>;
 
@@ -19,17 +19,14 @@ lazy_static! {
         Regex::new(r"^[[:space:]]*\+\+\+\r?\n((?s).*?(?-s))\+\+\+\r?\n?((?s).*(?-s))$").unwrap();
 }
 
-fn split_content(
-    file_path: &Path,
-    content: &str,
-) -> Result<(String, String)> {
+fn split_content(file_path: &Path, content: &str) -> Result<(String, String)> {
     if !PAGE_RE.is_match(content) {
         println!(
             "Couldn't find front matter in `{}`. Did you forget to add `+++`?",
             file_path.to_string_lossy()
         );
         return Err(Error::Any {
-            detail: format!("{} is above ", "a")
+            detail: format!("{} is above ", "a"),
         });
     }
 
@@ -56,8 +53,9 @@ pub struct NoteMetaData {
 
 impl NoteMetaData {
     fn parse(toml_str: &str) -> Result<NoteMetaData> {
-        let note_meta: NoteMetaData = toml::from_str(toml_str)
-            .context(IoError {path: std::path::PathBuf::new()})?;
+        let note_meta: NoteMetaData = toml::from_str(toml_str).context(IoError {
+            path: std::path::PathBuf::new(),
+        })?;
         Ok(note_meta)
     }
 

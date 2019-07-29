@@ -1,24 +1,22 @@
 #[macro_use]
 extern crate serde_derive;
+#[macro_use]
+extern crate slog;
+extern crate slog_term;
+
+use serde_json::json;
+use slog::Drain;
+use std::sync::Mutex;
 
 pub mod cmd;
 pub mod error;
 pub mod note;
 pub mod utils;
 pub mod wkspace;
-
-pub use wkspace::Wkspace;
 pub use cmd::Cmd;
+pub use wkspace::Wkspace;
 
-use serde_json::json;
-
-#[macro_use]
-extern crate slog;
-extern crate slog_term;
-use slog::Drain;
-use std::sync::Mutex;
-
-pub fn run() -> error::Result<()>  {
+pub fn run() -> error::Result<()> {
     let decorator = slog_term::TermDecorator::new().build();
     let drain = Mutex::new(slog_term::FullFormat::new(decorator).build()).fuse();
     let root_log = slog::Logger::root(drain, o!("version" => env!("CARGO_PKG_VERSION")));
@@ -78,6 +76,6 @@ pub fn run() -> error::Result<()>  {
             }
             Ok(())
         })
-        .run()?;
+        .run().unwrap();
     Ok(())
 }
