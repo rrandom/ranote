@@ -4,11 +4,15 @@ extern crate lazy_static;
 extern crate serde_derive;
 
 use regex::Regex;
-use std::error::Error;
+// use std::error::Error;
 use std::path::Path;
-use std::result;
 
-type Result<T> = result::Result<T, Box<dyn Error>>;
+mod error;
+
+use snafu::*;
+use error::*;
+
+// type Result<T> = result::Result<T, Box<dyn Error>>;
 
 lazy_static! {
     static ref PAGE_RE: Regex =
@@ -18,13 +22,15 @@ lazy_static! {
 fn split_content(
     file_path: &Path,
     content: &str,
-) -> std::result::Result<(String, String), failure::Error> {
+) -> Result<(String, String)> {
     if !PAGE_RE.is_match(content) {
         println!(
             "Couldn't find front matter in `{}`. Did you forget to add `+++`?",
             file_path.to_string_lossy()
         );
-        return Err(failure::err_msg("cant parse"));
+        return Err(Error::Any {
+            detail: format!("{} is above ", "a")
+        });
     }
 
     let caps = PAGE_RE.captures(content).unwrap();
@@ -50,7 +56,8 @@ pub struct NoteMetaData {
 
 impl NoteMetaData {
     fn parse(toml_str: &str) -> Result<NoteMetaData> {
-        let note_meta: NoteMetaData = toml::from_str(toml_str)?;
+        let note_meta: NoteMetaData = toml::from_str(toml_str)
+            .context(IoError {path: std::path::PathBuf::new()})?;
         Ok(note_meta)
     }
 
