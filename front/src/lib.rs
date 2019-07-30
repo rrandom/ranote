@@ -88,26 +88,23 @@ mod tests {
         assert!(res.is_err());
     }
 
+    #[test]
     fn test_process_note() {
         let content = r#"
         +++
-    title = "Hello"
-    attachments = "Option<Vec<String>>"
+    title = "title"
     created = "String"
     modified = "String"
-    favorited = "bool"
-    pinned = "bool"
-    tags = "Option<Vec<String>>"
-    title = "String"
+    favorited = false
+    pinned = false
     +++
-    content string
-    "#;
+content string"#;
         let res = get_note_content(Path::new(""), content).expect("should get_content");
         let metadata = res.0;
         let content = res.1;
 
         assert_eq!(content, "content string");
-        assert_eq!(metadata.modified, String::from(""));
-        assert_eq!(metadata.title, String::from("String"));
+        assert_eq!(metadata.modified, String::from("String"));
+        assert_eq!(metadata.title, String::from("title"));
     }
 }
