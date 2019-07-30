@@ -2,17 +2,17 @@
 extern crate serde_derive;
 #[macro_use]
 extern crate slog;
-extern crate slog_term;
-
-use serde_json::json;
-use slog::Drain;
-use std::sync::Mutex;
 
 pub mod cmd;
 pub mod error;
 pub mod note;
 pub mod utils;
 pub mod wkspace;
+
+use serde_json::json;
+use slog::Drain;
+use std::sync::Mutex;
+
 pub use cmd::Cmd;
 pub use wkspace::Wkspace;
 

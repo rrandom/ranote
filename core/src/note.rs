@@ -22,7 +22,6 @@ pub struct Note {
     writer: BufWriter<File>,
     reader: BufReader<File>,
     pub meta: NoteMetaData,
-    tags: BTreeSet<String>,
 }
 
 impl Note {
@@ -58,7 +57,6 @@ impl Note {
             writer,
             reader,
             meta: NoteMetaData::default(),
-            tags: BTreeSet::new(),
         };
 
         note.read()?;
