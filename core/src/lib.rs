@@ -46,7 +46,7 @@ pub fn run() -> error::Result<()> {
                 SaveNote { id, content } => {
                     let note = wkspace.get_note_by_name(&id).expect("could not get note");
                     note.write(content).expect("can not write");
-                    info!(root_log, "Note Saved"; "name" => &id, "content" => note.content());
+                    info!(root_log, "Note Saved"; "id" => &id, "content" => note.content());
                 }
                 LoadNote { id, cb } => {
                     let note = wkspace.get_note_by_name(&id).expect("could not get note");
@@ -55,7 +55,7 @@ pub fn run() -> error::Result<()> {
                     let params =
                         json!({ "id": note.id(), "name": note.name(), "path": note.get_path(), "content": content });
                     wv.eval(&format_callback(&cb, &params.to_string()))?;
-                    info!(root_log, "Note Loaded"; "name" => &id, "content" => content);
+                    info!(root_log, "Note Loaded"; "id" => &id, "name" => note.name());
                 }
                 Debug { name, msg } => {
                     info!(root_log, "[WEB]Debug"; "name" => &name, "msg" => &msg);

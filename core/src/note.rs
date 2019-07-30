@@ -1,5 +1,4 @@
 use front::{get_note_content, NoteMetaData};
-use std::collections::BTreeSet;
 use std::fs::{self, File, OpenOptions};
 use std::io::{BufReader, BufWriter, Read, Seek, SeekFrom};
 use std::path::{Path, PathBuf};
@@ -114,7 +113,10 @@ impl Note {
             path: self.path.clone(),
         })?;
         let (meta, content) = get_note_content(&self.path, &content)
-            .unwrap_or_else(|_| (NoteMetaData::default(), content));
+            .unwrap_or_else(|e| {
+                dbg!(e);
+                (NoteMetaData::default(), content)
+            });
         self.meta = meta;
         self.content = content;
 

@@ -21,12 +21,8 @@ lazy_static! {
 
 fn split_content(file_path: &Path, content: &str) -> Result<(String, String)> {
     if !PAGE_RE.is_match(content) {
-        println!(
-            "Couldn't find front matter in `{}`. Did you forget to add `+++`?",
-            file_path.to_string_lossy()
-        );
         return Err(Error::Any {
-            detail: format!("{} is above ", "a"),
+            detail: format!("Couldn't find front matter in `{}`. Did you forget to add `+++`?", file_path.to_string_lossy()),
         });
     }
 
@@ -37,6 +33,7 @@ fn split_content(file_path: &Path, content: &str) -> Result<(String, String)> {
 pub fn get_note_content(file_path: &Path, content: &str) -> Result<(NoteMetaData, String)> {
     let (front_matter, content) = split_content(file_path, content)?;
     let meta = NoteMetaData::parse(&front_matter)?;
+    dbg!(&meta);
     Ok((meta, content))
 }
 
