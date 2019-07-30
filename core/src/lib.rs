@@ -46,7 +46,7 @@ pub fn run() -> error::Result<()> {
                 SaveNote { id, content } => {
                     let note = wkspace.get_note_by_name(&id).expect("could not get note");
                     note.write(content).expect("can not write");
-                    info!(root_log, "Note Saved"; "id" => &id, "content" => note.content());
+                    info!(root_log, "Note Saved"; "id" => &id);
                 }
                 LoadNote { id, cb } => {
                     let note = wkspace.get_note_by_name(&id).expect("could not get note");
