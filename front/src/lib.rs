@@ -31,11 +31,10 @@ fn split_content(file_path: &Path, content: &str) -> Result<(String, String)> {
 pub fn get_note_content(file_path: &Path, content: &str) -> Result<(NoteMetaData, String)> {
     let (front_matter, content) = split_content(file_path, content)?;
     let meta = NoteMetaData::parse(&front_matter)?;
-    dbg!(&meta);
     Ok((meta, content))
 }
 
-#[derive(Debug, Deserialize)]
+#[derive(Debug, Deserialize, Serialize, PartialEq)]
 pub struct NoteMetaData {
     attachments: Option<Vec<String>>,
     created: DateTime<Local>,
@@ -50,6 +49,10 @@ impl NoteMetaData {
     fn parse(toml_str: &str) -> Result<NoteMetaData> {
         let note_meta: NoteMetaData = toml::from_str(toml_str).context(ParseError {})?;
         Ok(note_meta)
+    }
+
+    pub fn to_string(&self) -> Result<String> {
+        Ok(toml::to_string(&self).unwrap())
     }
 
     pub fn title(&self) -> &str {
@@ -126,5 +129,13 @@ content string"#;
         assert_eq!(metadata.title, String::from("title"));
         assert_eq!(metadata.tags, Some(vec![String::from("tag1")]));
         assert_eq!(metadata.attachments, Some(vec![String::from("attach1")]));
+    }
+
+    #[test]
+    fn to_str() {
+        let meta = NoteMetaData::default();
+        let meta_str = meta.to_string().unwrap();
+
+        assert_eq!(meta, NoteMetaData::parse(&meta_str).unwrap());
     }
 }
