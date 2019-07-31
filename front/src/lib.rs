@@ -19,9 +19,9 @@ lazy_static! {
 
 fn split_content(file_path: &Path, content: &str) -> Result<(String, String)> {
     if !PAGE_RE.is_match(content) {
-        return Err(Error::NoFrontMatter {
+        return NoFrontMatter {
             path: format!("{}", file_path.to_string_lossy()),
-        });
+        }.fail();
     }
 
     let caps = PAGE_RE.captures(content).unwrap();
