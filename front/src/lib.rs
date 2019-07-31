@@ -52,7 +52,7 @@ impl NoteMetaData {
     }
 
     pub fn to_string(&self) -> Result<String> {
-        Ok(toml::to_string(&self).unwrap())
+        toml::to_string(&self).context(SerError{})
     }
 
     pub fn title(&self) -> &str {

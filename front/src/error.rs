@@ -7,6 +7,9 @@ pub enum Error {
     #[snafu(display("could not parse {}", source))]
     ParseError { source: toml::de::Error },
 
+    #[snafu(display("could not stringify {}", source))]
+    SerError { source: toml::ser::Error },
+
     #[snafu(display(
         "Couldn't find front matter in `{}`. Did you forget to add `+++`?",
         path
