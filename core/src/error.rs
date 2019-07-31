@@ -11,23 +11,28 @@ pub enum Error {
     },
 
     #[snafu(display("path not exist {}", path.display()))]
-    PathNotExist { path: PathBuf },
+    PathNotExist {
+        path: PathBuf,
+    },
 
     #[snafu(display("note not exist {}", fname))]
-    NoNote { fname: String },
+    NoNote {
+        fname: String,
+    },
 
     #[snafu(display("note already exist {}", path.display()))]
-    NoteAlreadlyExist { path: PathBuf },
+    NoteAlreadlyExist {
+        path: PathBuf,
+    },
 
-    MetaError{ source: front::error::Error }
+    MetaError {
+        source: front::error::Error,
+    },
 }
-
 
 impl From<front::error::Error> for Error {
     fn from(e: front::error::Error) -> Self {
-        Error::MetaError {
-            source: e
-        }
+        Error::MetaError { source: e }
     }
 }
 

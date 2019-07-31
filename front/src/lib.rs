@@ -5,10 +5,10 @@ extern crate serde_derive;
 
 pub mod error;
 
-use regex::Regex;
-use std::path::Path;
 use chrono::prelude::*;
+use regex::Regex;
 use std::collections::BTreeSet;
+use std::path::Path;
 
 use error::*;
 use snafu::*;
@@ -22,7 +22,8 @@ fn split_content(file_path: &Path, content: &str) -> Result<(String, String)> {
     if !PAGE_RE.is_match(content) {
         return NoFrontMatter {
             path: format!("{}", file_path.to_string_lossy()),
-        }.fail();
+        }
+        .fail();
     }
 
     let caps = PAGE_RE.captures(content).unwrap();
@@ -53,7 +54,7 @@ impl NoteMetaData {
     }
 
     pub fn to_string(&self) -> Result<String> {
-        toml::to_string(&self).context(SerError{})
+        toml::to_string(&self).context(SerError {})
     }
 
     pub fn title(&self) -> &str {
@@ -131,7 +132,10 @@ content string"#;
         let content = res.1;
 
         assert_eq!(content, "content string");
-        assert_eq!(metadata.created, DateTime::parse_from_rfc3339("1996-12-19T16:39:57-08:00").unwrap());
+        assert_eq!(
+            metadata.created,
+            DateTime::parse_from_rfc3339("1996-12-19T16:39:57-08:00").unwrap()
+        );
         assert_eq!(metadata.modified, None);
         assert_eq!(metadata.title, String::from("title"));
         assert_eq!(metadata.tags, None);
@@ -154,7 +158,10 @@ content string"#;
         let content = res.1;
 
         assert_eq!(content, "content string");
-        assert_eq!(metadata.created, DateTime::parse_from_rfc3339("2014-11-28T12:00:09.000000001Z").unwrap());
+        assert_eq!(
+            metadata.created,
+            DateTime::parse_from_rfc3339("2014-11-28T12:00:09.000000001Z").unwrap()
+        );
         assert_eq!(metadata.title, String::from("title"));
         let mut tags = BTreeSet::new();
         tags.insert(String::from("tag1"));
