@@ -10,7 +10,7 @@
         :key="k"
         :class="['note', $route.query.id == note.id ? 'current' : '']"
       >
-        {{ note.id }}
+        {{ note.name }}
       </div>
     </div>
   </div>

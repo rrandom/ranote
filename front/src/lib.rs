@@ -3,11 +3,12 @@ extern crate lazy_static;
 #[macro_use]
 extern crate serde_derive;
 
-mod error;
+pub mod error;
 
 use regex::Regex;
 use std::path::Path;
 use chrono::prelude::*;
+use std::collections::BTreeSet;
 
 use error::*;
 use snafu::*;
@@ -41,7 +42,7 @@ pub struct NoteMetaData {
     modified: Option<DateTime<Local>>,
     favorited: bool,
     pinned: bool,
-    tags: Option<Vec<String>>,
+    tags: Option<BTreeSet<String>>,
     title: String,
 }
 
@@ -57,6 +58,34 @@ impl NoteMetaData {
 
     pub fn title(&self) -> &str {
         self.title.as_str()
+    }
+
+    pub fn set_title(&mut self, title: &str) {
+        self.title = String::from(title);
+    }
+
+    pub fn add_tag(&mut self, tag: &str) {
+        let tag = tag.to_owned();
+        if let Some(tags) = &mut self.tags {
+            tags.insert(tag);
+        } else {
+            let tags = BTreeSet::new();
+            self.tags = Some(tags);
+        }
+    }
+
+    pub fn remove_tag(&mut self, tag: &str) {
+        if let Some(tags) = &mut self.tags {
+            tags.remove(tag);
+        }
+    }
+
+    pub fn pinned(&self) -> bool {
+        self.pinned
+    }
+
+    pub fn toggle_pin(&mut self) {
+        self.pinned = !self.pinned();
     }
 }
 
@@ -127,7 +156,9 @@ content string"#;
         assert_eq!(content, "content string");
         assert_eq!(metadata.created, DateTime::parse_from_rfc3339("2014-11-28T12:00:09.000000001Z").unwrap());
         assert_eq!(metadata.title, String::from("title"));
-        assert_eq!(metadata.tags, Some(vec![String::from("tag1")]));
+        let mut tags = BTreeSet::new();
+        tags.insert(String::from("tag1"));
+        assert_eq!(metadata.tags, Some(tags));
         assert_eq!(metadata.attachments, Some(vec![String::from("attach1")]));
     }
 

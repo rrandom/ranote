@@ -91,7 +91,7 @@ impl Note {
     pub fn get_json_value(&self) -> Result<NoteItem> {
         Ok(NoteItem {
             path: self.get_path(),
-            name: String::from(self.id()),
+            name: String::from(self.name()),
             id: self.id.clone(),
         })
     }
@@ -127,6 +127,15 @@ impl Note {
         // self.writer.write_all(&content.as_bytes())?;
         // self.writer.flush()?;
         self.content = content.clone();
+
+        let tcontent = content.trim();
+        if !tcontent.is_empty() {
+            let title = content.lines().nth(0).unwrap();
+            self.meta.set_title(title);
+        }
+        let meta_str = self.meta.to_string()?;
+        let content = format!("+++\n{}+++\n{}", meta_str, content);
+
         std::fs::write(&self.path, &content).context(IoError {
             path: self.path.clone(),
         })?;
@@ -137,11 +146,13 @@ impl Note {
         unimplemented!();
     }
 
-    pub fn add_tag() -> Result<()> {
-        unimplemented!();
+    pub fn add_tag(&mut self, tag: &str) -> Result<()> {
+        self.meta.add_tag(tag);
+        Ok(())
     }
 
-    pub fn rm_tag() -> Result<()> {
-        unimplemented!();
+    pub fn rm_tag(&mut self, tag: &str) -> Result<()> {
+        self.meta.remove_tag(tag);
+        Ok(())
     }
 }

@@ -18,6 +18,17 @@ pub enum Error {
 
     #[snafu(display("note already exist {}", path.display()))]
     NoteAlreadlyExist { path: PathBuf },
+
+    MetaError{ source: front::error::Error }
+}
+
+
+impl From<front::error::Error> for Error {
+    fn from(e: front::error::Error) -> Self {
+        Error::MetaError {
+            source: e
+        }
+    }
 }
 
 pub type Result<T, E = Error> = std::result::Result<T, E>;
