@@ -67,7 +67,7 @@ impl Note {
         let path = path.as_ref().join(name);
 
         if path.exists() {
-            failure::err_msg("file already exists");
+            NoteAlreadlyExist { path: path.clone() }.fail()?;
         }
 
         fs::File::create(&path).context(IoError { path: path.clone() })?;

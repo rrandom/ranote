@@ -15,6 +15,9 @@ pub enum Error {
 
     #[snafu(display("note not exist {}", fname))]
     NoNote { fname: String },
+
+    #[snafu(display("note already exist {}", path.display()))]
+    NoteAlreadlyExist { path: PathBuf },
 }
 
 pub type Result<T, E = Error> = std::result::Result<T, E>;
