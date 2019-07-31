@@ -3,16 +3,13 @@ extern crate lazy_static;
 #[macro_use]
 extern crate serde_derive;
 
-use regex::Regex;
-// use std::error::Error;
-use std::path::Path;
-
 mod error;
+
+use regex::Regex;
+use std::path::Path;
 
 use error::*;
 use snafu::*;
-
-// type Result<T> = result::Result<T, Box<dyn Error>>;
 
 lazy_static! {
     static ref PAGE_RE: Regex =
@@ -21,8 +18,8 @@ lazy_static! {
 
 fn split_content(file_path: &Path, content: &str) -> Result<(String, String)> {
     if !PAGE_RE.is_match(content) {
-        return Err(Error::Any {
-            detail: format!("Couldn't find front matter in `{}`. Did you forget to add `+++`?", file_path.to_string_lossy()),
+        return Err(Error::NoFrontMatter {
+            path: format!("{}", file_path.to_string_lossy()),
         });
     }
 
@@ -50,9 +47,7 @@ pub struct NoteMetaData {
 
 impl NoteMetaData {
     fn parse(toml_str: &str) -> Result<NoteMetaData> {
-        let note_meta: NoteMetaData = toml::from_str(toml_str).context(IoError {
-            path: std::path::PathBuf::new(),
-        })?;
+        let note_meta: NoteMetaData = toml::from_str(toml_str).context(ParseError {})?;
         Ok(note_meta)
     }
 
@@ -91,7 +86,7 @@ mod tests {
     #[test]
     fn test_process_note() {
         let content = r#"
-        +++
++++
     title = "title"
     created = "String"
     modified = "String"
@@ -106,5 +101,29 @@ content string"#;
         assert_eq!(content, "content string");
         assert_eq!(metadata.modified, String::from("String"));
         assert_eq!(metadata.title, String::from("title"));
+        assert_eq!(metadata.tags, None);
+        assert_eq!(metadata.attachments, None);
+
+        let content = r#"
++++
+    title = "title"
+    created = "String"
+    modified = "String"
+    favorited = false
+    pinned = false
+    tags = ["tag1"]
+    attachments= ["attach1"]
+    +++
+content string"#;
+
+        let res = get_note_content(Path::new(""), content).expect("should get_content");
+        let metadata = res.0;
+        let content = res.1;
+
+        assert_eq!(content, "content string");
+        assert_eq!(metadata.modified, String::from("String"));
+        assert_eq!(metadata.title, String::from("title"));
+        assert_eq!(metadata.tags, Some(vec![String::from("tag1")]));
+        assert_eq!(metadata.attachments, Some(vec![String::from("attach1")]));
     }
 }
