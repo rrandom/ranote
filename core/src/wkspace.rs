@@ -45,7 +45,7 @@ impl Wkspace {
         Ok(self.workspace_path.as_ref())
     }
 
-    pub fn get_note_by_name(&mut self, name: &str) -> Result<&mut Note> {
+    pub fn get_note_by_id(&mut self, name: &str) -> Result<&mut Note> {
         self.notes.get_mut(name).context(NoNote {
             fname: String::from(name),
         })
@@ -56,6 +56,6 @@ impl Wkspace {
         let note = Note::new(self.get_path()?, &name)?;
 
         self.notes.insert(name.clone(), note);
-        self.get_note_by_name(&name)
+        self.get_note_by_id(&name)
     }
 }

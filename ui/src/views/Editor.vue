@@ -76,6 +76,10 @@ export default class Editor extends Vue {
     if (this.$route.query.id) {
       this.loadNote(this.$route.query.id as string);
     }
+
+    window.saveNoteCb = ({ name, id }: {name: string, id: string}) => {
+      store.commit('updateNoteName', {name, id});
+    };
   }
 }
 </script>

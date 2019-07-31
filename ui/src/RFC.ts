@@ -35,6 +35,7 @@ export default class RFC {
         id: note.id,
         content: newContent,
       },
+      cb: 'saveNoteCb',
     });
   }
 

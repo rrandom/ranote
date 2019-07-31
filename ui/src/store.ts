@@ -13,6 +13,7 @@ interface IStore {
   // Mutations (functions return void and optionally accept payload)
   setNotes(notes: Note[]): void;
   setActiveNote(note: ActiveNote): void;
+  updateNoteName({name, id}: {name: string, id: string}): void;
 }
 
 export default new Vuex.Store<IStore>({
@@ -29,6 +30,13 @@ export default new Vuex.Store<IStore>({
     },
     setActiveNote(state, note) {
       state.activeNote = note;
+    },
+    updateNoteName(state, {name, id }) {
+      state.notes.forEach((note) => {
+        if (note.id === id) {
+          note.name = name;
+        }
+      });
     },
   },
 });

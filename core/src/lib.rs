@@ -43,13 +43,16 @@ pub fn run() -> error::Result<()> {
                     let notes = serde_json::to_string(&notes).unwrap();
                     wv.eval(&format_callback(&cb, &notes.to_string()))?;
                 }
-                SaveNote { id, content } => {
-                    let note = wkspace.get_note_by_name(&id).expect("could not get note");
-                    note.write(content).expect("can not write");
+                SaveNote { id, content, cb } => {
+                    let note = wkspace.get_note_by_id(&id).expect("could not get note");
+                    if note.write(content).expect("can not write") {
+                        let params = json!({ "id": note.id(), "name": note.name() });
+                        wv.eval(&format_callback(&cb, &params.to_string()))?;
+                    }
                     info!(root_log, "Note Saved"; "id" => &id);
                 }
                 LoadNote { id, cb } => {
-                    let note = wkspace.get_note_by_name(&id).expect("could not get note");
+                    let note = wkspace.get_note_by_id(&id).expect("could not get note");
                     note.read().expect("refresh");
                     let content = note.content();
                     let params =

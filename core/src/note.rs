@@ -122,16 +122,18 @@ impl Note {
         Ok(())
     }
 
-    pub fn write(&mut self, content: String) -> Result<()> {
+    pub fn write(&mut self, content: String) -> Result<bool> {
         // self.writer.seek(SeekFrom::Start(0))?;
         // self.writer.write_all(&content.as_bytes())?;
         // self.writer.flush()?;
+        let mut update_ui = false;
         self.content = content.clone();
 
         let tcontent = content.trim();
         if !tcontent.is_empty() {
             let title = content.lines().nth(0).unwrap();
             self.meta.set_title(title);
+            update_ui = true;
         }
         let meta_str = self.meta.to_string()?;
         let content = format!("+++\n{}+++\n{}", meta_str, content);
@@ -139,7 +141,7 @@ impl Note {
         std::fs::write(&self.path, &content).context(IoError {
             path: self.path.clone(),
         })?;
-        Ok(())
+        Ok(update_ui)
     }
 
     pub fn save(&mut self) -> Result<()> {

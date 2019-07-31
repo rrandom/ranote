@@ -5,6 +5,7 @@ interface Window {
   loadNoteCb(arg: any): void;
   newNoteCb(arg: any): void;
   debugCb(arg: any): void;
+  saveNoteCb(arg: any): void;
 }
 
 declare module 'typography-theme-grand-view';
