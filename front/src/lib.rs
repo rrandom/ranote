@@ -7,6 +7,7 @@ mod error;
 
 use regex::Regex;
 use std::path::Path;
+use chrono::prelude::*;
 
 use error::*;
 use snafu::*;
@@ -37,8 +38,8 @@ pub fn get_note_content(file_path: &Path, content: &str) -> Result<(NoteMetaData
 #[derive(Debug, Deserialize)]
 pub struct NoteMetaData {
     attachments: Option<Vec<String>>,
-    created: String,
-    modified: String,
+    created: DateTime<Local>,
+    modified: Option<DateTime<Local>>,
     favorited: bool,
     pinned: bool,
     tags: Option<Vec<String>>,
@@ -60,8 +61,8 @@ impl Default for NoteMetaData {
     fn default() -> NoteMetaData {
         NoteMetaData {
             attachments: None,
-            created: String::from(""),
-            modified: String::from(""),
+            created: Local::now(),
+            modified: None,
             favorited: false,
             pinned: false,
             tags: None,
@@ -88,8 +89,7 @@ mod tests {
         let content = r#"
 +++
     title = "title"
-    created = "String"
-    modified = "String"
+    created = "1996-12-19T16:39:57-08:00"
     favorited = false
     pinned = false
     +++
@@ -99,7 +99,8 @@ content string"#;
         let content = res.1;
 
         assert_eq!(content, "content string");
-        assert_eq!(metadata.modified, String::from("String"));
+        assert_eq!(metadata.created, DateTime::parse_from_rfc3339("1996-12-19T16:39:57-08:00").unwrap());
+        assert_eq!(metadata.modified, None);
         assert_eq!(metadata.title, String::from("title"));
         assert_eq!(metadata.tags, None);
         assert_eq!(metadata.attachments, None);
@@ -107,8 +108,8 @@ content string"#;
         let content = r#"
 +++
     title = "title"
-    created = "String"
-    modified = "String"
+    created = "2014-11-28T12:00:09.000000001Z"
+    modified = "2014-11-28T12:00:09.000000001Z"
     favorited = false
     pinned = false
     tags = ["tag1"]
@@ -121,7 +122,7 @@ content string"#;
         let content = res.1;
 
         assert_eq!(content, "content string");
-        assert_eq!(metadata.modified, String::from("String"));
+        assert_eq!(metadata.created, DateTime::parse_from_rfc3339("2014-11-28T12:00:09.000000001Z").unwrap());
         assert_eq!(metadata.title, String::from("title"));
         assert_eq!(metadata.tags, Some(vec![String::from("tag1")]));
         assert_eq!(metadata.attachments, Some(vec![String::from("attach1")]));
